@@ -9,6 +9,9 @@
 #include <linux/gpio.h>
 #include <linux/kernel.h>
 
+#include "temp.h"
+#include "pwm.h"
+
 // Temperatursensor
 #define DRIVER_NAME "test_i2c"
 #define DRIVER_CLASS "testClass"
@@ -45,7 +48,7 @@ static struct cdev cdev;
 static int dev_major = 0;
 static struct class *dev_class = NULL;
 
-static int dev_uevent(struct device *dev, struct kobj_uevent_env *env)
+int dev_uevent(struct device *dev, struct kobj_uevent_env *env)
 {
 	add_uevent_var(env, "DEVMODE=%#o", 0666);
 	return 0;
@@ -62,55 +65,66 @@ static struct file_operations fopsMotor = {
 	.read = dev_read
 };
 
-static int __init dev_init(void)
+int __init dev_init(void)
 {
-	int ret = -1;
-	// Motor
-	gpio_is_valid(PWM);			// PWM write
-	gpio_is_valid(RPM);			// RPM read
 
-	gpio_request(PWM, "PWM");		// output wegen write
-	gpio_request(RPM, "RPM");		// input wegen read
+	printk("TEST 1");
 
-	gpio_direction_output(PWM, 0);
-	gpio_direction_input(RPM, 0);
+	my_test();
 
-	gpio_export(PWM, false);
-	gpio_export(RPM, false);
+	printk("TEST 2");
 
 
-	ret = -2;
-	// Temperatursensor via I2C
-	alloc_chrdev_region(&myDeviceNr, 0, 1, DRIVER_NAME);
-	myClass = class_create(THIS_MODULE, DRIVER_CLASS);
-	myClass->dev_uevent = dev_uevent;
-	device_create(myClass, NULL, myDeviceNr, NULL, DRIVER_NAME);
+	// int ret = -1;
+	// // Motor
+	// gpio_is_valid(PWM);			// PWM write
+	// gpio_is_valid(RPM);			// RPM read
 
-	cdev_init(&myDevice, &fopsTemp);
-	cdev_add(&myDevice, myDeviceNr, 1);
+	// gpio_request(PWM, "PWM");		// output wegen write
+	// gpio_request(RPM, "RPM");		// input wegen read
 
-	test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
-	test_i2c_client = i2c_new_client_device(test_i2c_adapter,
-											&test_i2c_board_info);
-	i2c_add_driver(&test_driver);
-	ret = 0;
-	i2c_put_adapter(test_i2c_adapter);
-	return ret;
+	// gpio_direction_output(PWM, 0);
+	// gpio_direction_input(RPM);
+
+	// gpio_export(PWM, false);
+	// gpio_export(RPM, false);
+
+
+	// ret = -2;
+	// // Temperatursensor via I2C
+	// alloc_chrdev_region(&myDeviceNr, 0, 1, DRIVER_NAME);
+	// myClass = class_create(THIS_MODULE, DRIVER_CLASS);
+	// myClass->dev_uevent = dev_uevent;
+	// device_create(myClass, NULL, myDeviceNr, NULL, DRIVER_NAME);
+
+	// cdev_init(&myDevice, &fopsTemp);
+	// cdev_add(&myDevice, myDeviceNr, 1);
+
+	// test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
+	// test_i2c_client = i2c_new_client_device(test_i2c_adapter,
+	// 										&test_i2c_board_info);
+	// i2c_add_driver(&test_driver);
+	// ret = 0;
+	// i2c_put_adapter(test_i2c_adapter);
+	// return ret;
+	return 0;
 }
 
-static ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_t *offset)
+ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_t *offset)
 {
 	uint8_t data;
-	
+
 	while(1)
 	{
 		int ret = copy_from_user(&data, buf, 1);
-		if (ret >= 0 || ret )
+		if (ret >= 0 || ret );
 	}
+
+	return count;
 
 }
 
-static ssize_t dev_read(struct file *file, char *user_buffer, size_t count, loff_t *offs)
+ssize_t dev_read(struct file *file, char *user_buffer, size_t count, loff_t *offs)
 {
 	int to_copy, not_copied;
 	int temp;
@@ -132,19 +146,19 @@ static ssize_t dev_read(struct file *file, char *user_buffer, size_t count, loff
 }
 
 
-static void __exit dev_exit(void)
+void __exit dev_exit(void)
 {
-	// Motor
-	gpio_unexport(PWM);
-	gpio_unexport(RPM);
+	// // Motor
+	// gpio_unexport(PWM);
+	// gpio_unexport(RPM);
 
-	// Temperatursensor
-	i2c_unregister_device(test_i2c_client);
-	i2c_del_driver(&test_driver);
-	cdev_del(&myDevice);
-	device_destroy(myClass, myDeviceNr);
-	class_destroy(myClass);
-	unregister_chrdev_region(myDeviceNr, 1);
+	// // Temperatursensor
+	// i2c_unregister_device(test_i2c_client);
+	// i2c_del_driver(&test_driver);
+	// cdev_del(&myDevice);
+	// device_destroy(myClass, myDeviceNr);
+	// class_destroy(myClass);
+	// unregister_chrdev_region(myDeviceNr, 1);
 }
 
 module_init(dev_init);
