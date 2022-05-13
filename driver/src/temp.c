@@ -1,6 +1,7 @@
 #include "temp.h"
 
-
+// Communication with the temperature sensor
+// by I2C
 static struct i2c_adapter *test_i2c_adapter = NULL;
 static struct i2c_client *test_i2c_client = NULL;
 static const struct i2c_device_id test_id[] =
@@ -33,6 +34,7 @@ void tempDeinit(void)   {
 	}
 }
 
+// read temperatur value from the temperature sensor
 u16 readTemp(void) {
 	int temp;
 	u8 b1, b2;

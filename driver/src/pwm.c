@@ -4,6 +4,8 @@ int duty      = 50;
 int frequency = 10000;
 int enable    = 1;
 
+// PWM runs as a thread
+// need to be started and exited
 struct task_struct *task;
 int pwm_thread(void *data)
 {

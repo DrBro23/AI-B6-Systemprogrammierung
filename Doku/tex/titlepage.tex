@@ -1,0 +1,47 @@
+% Robin Prillwitz 2020
+
+\newgeometry{
+    left=1.50cm,
+    right=1.50cm,
+    top=1.11cm,
+    bottom=2cm
+}
+\begin{titlepage}
+    \thispagestyle{empty}
+    % draw outline
+    \begin{tikz}[remember picture,overlay]
+        \draw[black, line width=1pt]
+        (current page text area.south west) rectangle
+        (current page text area.north east);
+    \end{tikz}
+    % write text stuff
+    \begin{center}
+        {
+        \Verdana
+        \fontsize{14}{14.4}\selectfont
+        \vspace{2.4cm}
+        Technische Hochschule Deggendorf\\
+        \vspace{2cm}
+        Fakultät \faculty\\
+        (Bachelor-Studiengang \degree)\\
+        \vspace{3cm}
+        \textbf{\title}\\
+        \vspace{3.8cm}
+        \type \\ für das Fach\\ \class\\ \semester\\
+        \vspace{3.8cm}
+        \fontsize{14}{24.4}\selectfont
+        % lower two column stuff
+        \begin{tabularx}{0.9\textwidth}{
+            >{\hsize=0.9\hsize\linewidth=\hsize}X
+            >{\hsize=0.5\hsize\linewidth=\hsize}X
+        }
+            vorgelegt von: & Erstprüfer: \\
+            \authorA\;(\matrnrA), \zipA\;\locationA & \underline{\hspace*{5.5cm}} \\
+            \authorB\;(\matrnrB), \zipB\;\locationB & \\
+            am: \date &
+        \end{tabularx}
+        }
+    \end{center}
+\end{titlepage}
+\restoregeometry
+\newpage

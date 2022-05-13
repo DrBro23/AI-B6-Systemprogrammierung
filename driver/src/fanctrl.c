@@ -56,6 +56,8 @@ int __init dev_init(void)
 	return 0;
 }
 
+
+// Was macht der Spass nochmal? Bitbanging
 unsigned int ToUInt(char* str)
 {
     unsigned int mult = 1;
@@ -70,6 +72,8 @@ unsigned int ToUInt(char* str)
     return re;
 }
 
+
+// Write the PWM to the fan
 ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_t *offset)
 {
 	size_t max_len = 30, not_copied;
@@ -94,6 +98,7 @@ ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_
 	return count;
 }
 
+// Get the data from RPM?
 ssize_t dev_read(struct file *file, char *user_buffer, size_t count, loff_t *offs)
 {
 	// TODO

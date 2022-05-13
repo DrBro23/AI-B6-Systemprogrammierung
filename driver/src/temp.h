@@ -8,7 +8,7 @@
 #include <linux/kernel.h>
 
 #define I2C_BUS_AVAILABLE 1
-#define SLAVE_DEVICE_NAME "deine mutter"
+#define SLAVE_DEVICE_NAME "deine mutter...nicht in diesem ausdruck!"
 #define SLAVE_ADDRESS 0x48
 
 void tempInit(void);

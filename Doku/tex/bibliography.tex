@@ -1,0 +1,114 @@
+% Robin Prillwitz 2020
+
+% ----------------------------- biblatex w/ biber ---------------------------- %
+\usepackage[
+	backend=biber,
+	natbib=true,
+	% backref=true,
+	% autocite=footnote,
+	sorting=nyt,
+	style=authoryear,
+	% style=numeric,
+	sortlocale=de_DE
+]{biblatex}
+
+% forbid pagebreaks in bib entry
+\patchcmd{\bibsetup}{\interlinepenalty=5000}{\interlinepenalty=10000}{}{}
+
+% ------------------------------- bib resouces ------------------------------- %
+% \addbibresource[]{./references/test.bib}
+\addbibresource{./references/references.bib}
+
+% ------------------------------- localization ------------------------------- %
+\DefineBibliographyStrings{ngerman}{%
+		bibliography    = {Literaturverzeichnis},
+		nodate          = {o.J.},
+		backrefpage		 = {siehe Seite},% originally "cited on page"
+		backrefpages	= {siehe Seiten},% originally "cited on pages"
+		andothers		= {et al.}
+}
+
+
+
+% formatting & driver like
+% https://www.scribbr.de/category/deutsche-zitierweise/
+% -------------------------------- formatting -------------------------------- %
+% \DeclareFieldFormat{editor}{#1}
+% \DeclareFieldFormat{publisher}{#1}
+% \DeclareFieldFormat{url}{[online]\ \url{#1}}
+% \DeclareFieldFormat{urldate}{[#1]}
+
+
+% ---------------------------------- drivers --------------------------------- %
+
+% \DeclareBibliographyDriver{online}{%
+%     \newunit%
+%     \printnames{author}%
+%     \ifnameundef{editor}%
+%     {}%
+%     {%
+%         \newunit%
+%         \printnames{editor}%
+%     }%
+%     \newunit\newblock%
+%     :\ \printfield{title},%
+%     \newunit\newblock%
+%     \iffieldundef{publisher}%
+%     {}%
+%     {%
+%         \ in \printfield{publisher},%
+%         \newunit\newblock%
+%     }%
+%     \ \iffieldundef{year}%
+%     {(o.J.)}%
+%     {%
+%         \printfield{year}%
+%     },%
+%     \newunit\newblock%
+%     \newunit%
+%     \printfield{url}%
+%     \ \printurldate%
+%     \newunit%
+%     \finentry
+% }
+
+% \DeclareBibliographyDriver{book}{%
+%     \newunit%
+%     \printnames{author}:\ %
+%     \newunit%
+%     \printfield{title},%
+%     \newunit\newblock%
+%     \iffieldundef{editor}%
+%     {}{%
+%         \printnames{editor},%
+%         \newunit\newblock%
+%     }%
+%     \iffieldundef{volume}%
+%     {}{%
+%         \printfield{volume},%
+%         \newunit\newblock%
+%     }%
+%     \iffieldundef{edition}%
+%     {}{%
+%         \printfield{edition},%
+%         \newunit\newblock%
+%     }%
+%     \iflistundef{location}%
+%     {}{%
+%         \printlist{location}:%
+%         \newunit\newblock%
+%     }%
+%     \iflistundef{publisher}%
+%     {}{%
+%         \printlist{publisher},%
+%         \newunit\newblock%
+%     }%
+%     % band auflage verlag jahr
+%     \iffieldundef{year}%
+%     {(o.J.)}%
+%     {%
+%         \printfield{year}%
+%     }%
+%     \newunit%
+%     \finentry
+% }

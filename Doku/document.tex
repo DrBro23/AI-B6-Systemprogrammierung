@@ -1,0 +1,114 @@
+% Robin Prillwitz 2021
+\documentclass[11pt,leqno,letterpaper]{article}
+
+\input{./tex/preamble}
+\input{./tex/bibliography}
+\input{./tex/glossary}
+
+
+\def \faculty   {Angewandte Informatik}
+\def \degree    {Angewandte Informatik}
+\def \title     {Linux Treiber für PWM Motoren}
+\def \type      {Projektarbeit}
+\def \class     {Systemprogrammierung}
+\def \semester  {SS2022}
+
+\def \auditor   {Prof. Bösnecker}
+
+\def \authorA    {Robin Prillwitz}
+\def \matrnrA    {00805291}
+
+\def \zipA       {84326}
+\def \locationA  {Falkenberg}
+
+\def \authorB    {Sven Menzel}
+\def \matrnrB    {00804260}
+
+\def \zipB       {93073}
+\def \locationB  {Neutraubling}
+
+\def \date      {\today}
+
+\def \stretch {1}
+
+\begin{document}
+\setstretch{1.0}
+
+% HEADING
+\include{./tex/titlepage}
+
+\setcounter{page}{1}
+\pagenumbering{roman}
+% TOC
+% \addcontentsline{toc}{section}{Inhaltsverzeichnis}%
+% \thispagestyle{empty}
+\thispagestyle{fancy}
+\tableofcontents
+% TABLES
+\listoftables
+% \thispagestyle{empty}
+\thispagestyle{fancy}
+% FIGURES
+\listoffigures
+% \thispagestyle{empty}
+\thispagestyle{fancy}
+\newpage
+% ACRONYMS
+\setglossarystyle{listdotted}
+\setglossarystyle{tree}
+% \printacronyms[]
+\printglossary[type=\acronymtype, title=Abkürzungsverzeichnis]
+\printglossary
+% \thispagestyle{empty}
+\thispagestyle{fancy}
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+\pagestyle{fancy}
+
+\setstretch{\stretch}
+
+% ----------------------
+
+%%%%%\input{text/motivation.tex}
+% \newpage
+
+\input{tex/text.tex}
+\input{tex/eidesstatt.tex}
+
+
+
+
+
+
+
+
+
+% ----------------------
+
+\clearpage
+\newpage
+
+% BIBLIOGRAPHY
+\setstretch{1}
+\nocite{*}
+\section*{\bibname}
+\addcontentsline{toc}{section}{\bibname}
+
+\thispagestyle{fancy}
+% \begin{multicols*}{2}
+\printbibliography[heading=none]
+% \end{multicols*}
+
+% EIDENSTAT
+% \input{./tex/eidesstatt}
+% \thispagestyle{fancy}
+
+\clearpage
+\begin{appendices}
+\section{Quellcode}\label{code}
+\input{text/bisldoku}
+\end{appendices}
+
+\end{document}
