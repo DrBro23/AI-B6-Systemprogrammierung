@@ -1,15 +1,11 @@
 #pragma once
 
+#include <linux/init.h>
 #include <linux/io.h>
 #include <linux/module.h>
-#include <linux/gpio.h>
-#include <linux/delay.h>
-#include <linux/kthread.h>
+#include <linux/spi/spi.h>
 
-#define PWM_PIN 17
-#define THREAD_NAME "PWM"
-
-void pwmInit(void);
+int pwmInit(void);
 void pwmDeinit(void);
 
 void pwmSetDuty(int cycle);
