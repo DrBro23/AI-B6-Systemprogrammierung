@@ -18,9 +18,9 @@ void tempInit(void) {
 
     test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
 	if(test_i2c_adapter == NULL)	{
-		printk("No I2C Adapter found");
+		printk(KERN_CRIT "Fanctrl: No I2C Adapter found");
 	}	else	{
-		printk("Found I2C Adapter");
+		printk(KERN_DEBUG "Fanctrl: Found I2C Adapter");
 		test_i2c_client = i2c_new_client_device(test_i2c_adapter, &test_i2c_board_info);
     	i2c_add_driver(&test_driver);
     	i2c_put_adapter(test_i2c_adapter);

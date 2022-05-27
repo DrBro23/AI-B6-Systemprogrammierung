@@ -1,0 +1,27 @@
+% Robin Prillwitz 2020
+
+\usepackage[acronym, toc]{glossaries}
+\usepackage[automake, nonumberlist, nogroupskip]{glossaries-extra}
+\makeglossaries
+\setabbreviationstyle[acronym]{long-short}
+
+\newacronym{pwm}{PWM}{Pulse width modulation}
+\newacronym{i2c}{I\textsuperscript{2}C}{Inter-IC Communication}
+\newacronym{spi}{SPI}{Serial peripheral Interface}
+\newacronym{ioctl}{IOCTL}{IO-Control}
+\newacronym{ipc}{IPC}{Interprocess Communication}
+
+\newacronym{cpu}{CPU}{Central Processing Unit (Prozessor)}
+\newacronym{sbc}{SBC}{Single-Board Computer}
+\newacronym{cli}{CLI}{Command Line Interface}
+
+\newglossaryentry{rpi}{name={Raspberry Pi}, description={Ein kleiner \gls{sbc} für embedded Anwendungen}}
+\newglossaryentry{float}{name={floating point}, description={32 oder 64-bit Gleitkommazahlen}}
+\newglossaryentry{int}{name={integer}, description={32 oder 64-bit Ganze, natürliche, Zahlen}}
+
+% cursive acronyms
+\renewcommand*{\glstextformat}[1]{\textit{#1}}
+% glossary spaceing
+\renewcommand\glstreepredesc{\tabto{4cm}}
+
+\makeglossaries
