@@ -52,6 +52,10 @@
 % TABLE
 \usepackage{tabularx}
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
+% set up labelformat and labelsep for table
+\captionsetup[table]{labelformat=simple, labelsep=period}
+% set up labelformat and labelsep for subtable
+\captionsetup[subtable]{labelformat=simple, labelsep=colon}
 
 \definecolor{highlight}{rgb}{0.0, 0.105, 0.3568}
 \newcommand\hlc{\color{highlight}}
@@ -105,6 +109,8 @@
 \usetikzlibrary{calc}
 \usetikzlibrary{shapes}
 \usetikzlibrary{decorations.markings}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
 \usepackage{tikzpagenodes}
 \usepackage[european, betterproportions]{circuitikz}
 \usepackage{pgfplots}
@@ -113,6 +119,12 @@
 \pgfplotsset{
   table/search path={./data},
 }
+\usepackage{xparse}
+\NewDocumentCommand{\busref}{som}{\texttt{%
+#3%
+\IfValueTF{#2}{[#2]}{}%
+\IfBooleanTF{#1}{\#}{}%
+}}
 
 % APPENDIX
 \usepackage[toc,page]{appendix}
