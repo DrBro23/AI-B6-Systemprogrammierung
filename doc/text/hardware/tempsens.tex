@@ -1,5 +1,48 @@
 \subsection{Temperatursensor}
+Beim Temperatursensor handelt es sich um einen \gls{tmp102} der Firma SparkFun.
+Dieser hat einen Einsatzbereich von -40 bis 125°C und wird mit \gls{i2c} angesteuert. \\
+Auf dem Sensor stehen folgende Pins zur Verfügung: \\
+\gls{scl}, \gls{sda}, \gls{vcc}, \gls{gnd}, \gls{alert}, \gls{add} \\
+
+% TODO: Blockschaltbild vlt?
+Der Sensor benötigt \gls{vcc} und \gls{gnd} für die Spannungsversorgung, sowie \gls{scl} und \gls{sda} für die Kommunikation.
+Die Pins werden mit dem \gls{rpi} folgendermaßen verbunden: \\
+\begin{table}
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        \textbf{\gls{scl}} & \textbf{\gls{sda}} & \textbf{\gls{vcc}} & \textbf{\gls{gnd}} & \textbf{\gls{alert}} & \textbf{\gls{add}}\\
+        \hline
+        \hline
+        GPIO3 & GPIO2 & & & None & None \\
+        \hline
+        Pin5 & Pin3 & Pin2 & Pin14 & None & None \\
+        \hline
+    \end{tabular}
+    \caption{\gls{i2c} Pinout Tabelle}\label{i2cpinout}
+    \quad
+\end{table}
+
+
 \subsubsection{Hardwareanschluss}
+Die Schaltung des digitalen Potentiometers wird direkt an den \gls{rpi} angeschlossen. \\
+Die Pins werden folgendermaßen verbunden: \\
+\begin{table}
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{\gls{mosi}} & \textbf{\gls{miso}} & \textbf{\gls{sclk}} & \textbf{\gls{ss}} \\
+        \hline
+        \hline
+        GPIO10 & GPIO9 & 5V Power & GPIO11 & GPIO8 \\
+        \hline
+        Pin19 & Pin21 & Pin2 & Pin23 & Pin24 \\
+        \hline
+    \end{tabular}
+    \caption{\gls{spi} Pinout Tabelle}\label{spipinout}
+    \quad
+\end{table}
+
 \subsubsection{I\textsuperscript{2}C Bus}
 
 \begin{figure}

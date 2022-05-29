@@ -21,3 +21,6 @@ if (($Args[0] -eq $null) -or ($Args[0] -eq "build"))    {
 
 }
 exit
+
+# Für Mr Sven:
+# xelatex --extra-mem-top=2000000 -output-directory="dist" "document.tex"
