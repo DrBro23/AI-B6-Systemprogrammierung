@@ -1,7 +1,21 @@
 \subsection{\Acrshort{pwm}-Erzeugung}
+
+Um die Geschiwindigkeit eines Lüfters zu regulieren, wird dieser mit einem \gls{pwm} Signal gesteuert.
+Die Pulsweite ist proportional zur resultierenden Ziel Geschiwindigkeit.
+Der \gls{rpi} hat interne Hardware um \gls{pwm} Signale zu generieren.
+Diese sind jedoch nicht trivial aus dem Kernelspace erreichbar.
+
+Als Ersatzlösung wird externe Hardware genutzt.
+Ein \texttt{555} Timer erstellt ein rechteckiges Wechselsignal.
+Die Pulsweite wird durch ein \texttt{MCP41XXX} digitales Potentiometer über \gls{spi} eingestellt.
+Folglich ist die Lüftergeschwindigkeit proportional zur Pulsweite und proportional zum eingestellten Wiederstand.
+
 \subsubsection{SPI Bus}
 
-\begin{figure}[h]
+% TODO
+% Erklären wie SPI geht, auf figure verweisen
+
+\begin{figure}
     \begin{center}
     \begin{tikztimingtable}[%
         timing/dslope=0.2,
@@ -29,7 +43,27 @@
 
 \subsubsection{MCP41XXX Digitales Potentiometer}
 
-\begin{figure}[h]
+Die Schaltung des digitalen Potentiometers wird direkt an den \gls{rpi} angeschlossen.
+Die Pins werden wie in \autoref{tab:spi} verbunden.
+
+\begin{table}
+    \centering
+    \begin{tabular}{|r||l|l|l|l|l|}
+        \hline
+        \textbf{Funktion} & \textbf{\acrshort{mosi}} & \textbf{\acrshort{miso}} & \textbf{\acrshort{vcc}} & \textbf{\acrshort{sclk}} & \textbf{\acrshort{ss}} \\
+        \hline
+        \hline
+        \gls{rpi} Pin Name & GPIO10 & GPIO9 & 5V Power & GPIO11 & GPIO8 \\
+        \hline
+        \gls{rpi} Pin Number & Pin19 & Pin21 & Pin2 & Pin23 & Pin24 \\
+        \hline
+    \end{tabular}
+    \caption{\gls{spi} Pinout Tabelle}
+    \label{tab:spi}
+\end{table}
+
+
+\begin{figure}
     \begin{center}
     \begin{tikztimingtable}[%
         timing/dslope=0.2,
@@ -98,6 +132,10 @@
     \label{command-bits}
 \end{table}
 
+Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
+Um deren Wiederstandswert einzustellen müssen zwei Bytes über \gls{spi} gesendet werden.
+Das erste Stellt das Command-Byte dar.
+Das zweite die tatsächlichen Daten.
 Die in \autoref{spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus dem Command-Byte und aus einem folgenden Datenbyte zusammen.
 Die Bedeutung des Command-Byte wird in \autoref{command-bits} erklärt.
 Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
@@ -119,7 +157,7 @@ wobei
     D_{\text{n}} &: \text{Dezimalwert des Wiperregisters: } 0_{10} \leq D_{\text{n}} \leq 255_{10}
 \end{align*}
 
-\subsubsection{NE555 Timer}
+\subsubsection{555 Timer}
 
 \begin{figure}
     \centering
@@ -182,6 +220,10 @@ wobei
     \label{fig:ne555-pwm}
 \end{figure}
 
+Der Timer ist in einer astabilen Konfiguration verbunden.
+Der Timer erwartet lediglich eine Positive Spannung über $U+$ zu $U-$ von $3.3\si{\volt}$.
+Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \texttt{DIS}, oder auch and Pin 3, \texttt{OUT}, gegben.
+\texttt{DIS} ist Open-Drain womit der High-Pegel zu einer belibigen Spannung eingestellt werden kann.
 Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
 Folglich ist eine berechnung von $f$ nicht möglich
 \footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
