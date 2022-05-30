@@ -41,17 +41,19 @@
 % TOC
 % \addcontentsline{toc}{section}{Inhaltsverzeichnis}%
 % \thispagestyle{empty}
-\thispagestyle{fancy}
 \tableofcontents
-% TABLES
-\listoftables
-% \thispagestyle{empty}
 \thispagestyle{fancy}
+% TABLES
+\newpage
+\listoftables
+\thispagestyle{fancy}
+% \thispagestyle{empty}
 % FIGURES
 \listoffigures
+\thispagestyle{fancy}
 % \thispagestyle{empty}
 \thispagestyle{fancy}
-\newpage
+% \newpage
 % ACRONYMS
 \setglossarystyle{listdotted}
 \setglossarystyle{tree}
@@ -71,7 +73,9 @@
 % ----------------------
 
 \input{text/motivation.tex}
+\clearpage
 \input{text/hardware.tex}
+\clearpage
 \input{text/software.tex}
 
 % ----------------------
