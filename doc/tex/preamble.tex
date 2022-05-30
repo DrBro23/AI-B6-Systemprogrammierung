@@ -69,8 +69,8 @@
 % TOC
 \usepackage{tocloft}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
-\addto\captionsngerman{\renewcommand*\contentsname{\hlc Inhaltsverzeichnis}}
-\addto\captionsngerman{\renewcommand*\listfigurename{ Abbildungsverzeichnis}}
+\addto\captionsngerman{\renewcommand*\contentsname{Inhaltsverzeichnis}}
+\addto\captionsngerman{\renewcommand*\listfigurename{Abbildungsverzeichnis}}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 % \usepackage[nottoc]{tocbibind}
@@ -135,9 +135,9 @@
 \usepackage{listings}
 \renewcommand\lstlistingname{Quelltext} % Change language of section name
 \lstset{ % General setup for the package
-    basicstyle=\small\sffamily,
+    % basicstyle=\small\sffamily,
     numbers=left,
-    numberstyle=\tiny,
+    numberstyle=\small,
     frame=tb,
     tabsize=4,
     columns=fixed,
