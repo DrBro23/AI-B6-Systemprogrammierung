@@ -45,7 +45,7 @@ Da unsere Anwednung sich nominal bei und über Raumtemperatur in einer-Stellen P
             xmax=2400,
             ymin=-1.5,
             ymax=1.5,
-            samples=700,
+            samples=500,
             width=12cm,
             height=7cm,
             minor tick num=5,
@@ -59,8 +59,8 @@ Da unsere Anwednung sich nominal bei und über Raumtemperatur in einer-Stellen P
             ylabel={$\vartheta$},
             ylabel near ticks]
             % \addplot[domain=0:6.4, blue, very thick, smooth, ->] {2.1971*1.8206^x};
-            \addplot[domain=0:2400, red, thick] {(x * 0.0625) - round(x / 16)};
-            \addplot[domain=0:2400, blue, thick] {((x * 0.0625) - round(x / 16)) / (x * 0.0625)};
+            \addplot[domain=0:2400, red] {(x * 0.0625) - round(x / 16)};
+            \addplot[domain=0:2400, blue] {((x * 0.0625) - round(x / 16)) / (x * 0.0625)};
         \end{axis}
     \end{tikzpicture}
     \caption[Integerdivisionsinduzierter Rundungsfehler]{Integerdivisionsinduzierter Rundungsfehler der Temperatursensorkonversion
@@ -84,9 +84,32 @@ return temp;
 \end{lstlisting}
 
 \subsubsection{Potentiometer über \acrshort{spi}}
+
 \subsubsubsection{Protokoll}
+
 \subsubsubsection{Softwareablauf}
-\subsubsubsection{Devicetree overlay}
-\subsubsection{Fops}
-\subsubsection{IOCTL}
+
+\subsubsubsection{Devicetree Overlay}
+Auf dem \gls{rpi} muss der \gls{spi} Treiber durch \texttt{raspi-config} aktiviert werden.
+Dadurch werden unter \texttt{/dev} zwei \gls{spi} Treiber angelegt und das Hardware \gls{spi} Subsystem aktiviert.
+Die angelegten Treiber stellen eine \gls{api}-Verbindung zwischen Kernelspace und der Hardware dar.
+Jedoch werden durch die Treiber die \gls{ss} Signale belegt.
+Der Treiber zur Kommunikation über \gls{spi} funktioniert, kann jedoch aufgrund dessen nicht durch externe Programme im Kernelspace beansprucht werden.
+Um dies zu umgehen muss der Zugriff auf die \gls{ss} Signale durch die durch das System bereitgestellten Treiber unterbunden werden.
+
+Dazu wird der Devicetree zur Laufzeit mit einem Patch injeziert.
+Dadurch stehen die \gls{ss} Signale frei zur verfügung um durch unseren Treiber aus dem Kernelspace genutzt zu werden.
+Das Devicetree Overlay wird mit dem devicetree compiler kompiliert:
+\begin{lstlisting}
+dtc spidev_disabler.dts -O dtb < spidev_disabler.dtbo
+\end{lstlisting}
+Das generierte Overlay wird dannach injeziert:
+\begin{lstlisting}
+sudo dtoverlay -d . spidev_disabler
+\end{lstlisting}
+
+\subsubsection{\acrshort{fops}}
+
+\subsubsection{\Acrshort{ioctl}}
+
 \subsubsection{Kompilierung und Verlinkung}
