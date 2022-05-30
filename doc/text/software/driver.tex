@@ -2,7 +2,7 @@
 \subsubsection{Temperatursensor über \acrshort{i2c}}
 
 \Gls{i2c} Adapter Initialisieren.
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C, , firstnumber=19]
 test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
 if(test_i2c_adapter == NULL)	{
     printk(KERN_CRIT "Fanctrl: No I2C Adapter found");
@@ -15,7 +15,7 @@ if(test_i2c_adapter == NULL)	{
 \end{lstlisting}
 
 \Gls{i2c} Adapter De-initialisieren.
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C, firstnumber=31]
 if(test_i2c_client != NULL)	{
     i2c_unregister_device(test_i2c_client);
     i2c_del_driver(&test_driver);
@@ -69,7 +69,7 @@ Da unsere Anwednung sich nominal bei und über Raumtemperatur in einer-Stellen P
     }
     \label{fig:rounding-err}
 \end{figure}
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C, firstnumber=39]
 int temp;
 u8 b1, b2;
 

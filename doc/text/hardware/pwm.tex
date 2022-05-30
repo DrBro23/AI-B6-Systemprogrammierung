@@ -230,3 +230,40 @@ Folglich ist eine berechnung von $f$ nicht möglich
 Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
 
 \subsubsection{Lüfterkontrolle mit \acrshort{pwm}}
+
+Zur Kühlung wird ein \textit{NF-A4x20} 4-Poliger \gls{pwm} Lüfter von \textit{Noctua} aus \autoref{fig:fan-pic} verwendet.
+Dieser benötigt eine Gleichspannung von $5\si{\volt}$ und wird mit einem \gls{pwm} Signal mit einer Amplitude von $5\si{\volt}$.
+Das Tacho-Signal wird nicht verwendet.
+Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=6cm]{./pic/noctua-1.jpg}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=6cm]{./pic/noctua-2.jpg}
+    \end{subfigure}
+    \caption{Der Lüfter von \textit{Noctua} \autocite{noctua-fan}.}
+    \label{fig:fan-pic}
+\end{figure}
+
+\begin{table}
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{Lüfter Pin} & \textbf{Farbe} & \textbf{Funktion}  & \textbf{Anschluss} \\
+        \hline
+        \hline
+        1 & \textcolor{black}{$\blacksquare$ Schwarz} & \gls{gnd} & \gls{gnd} \\
+        \hline
+        2 & \textcolor{Goldenrod}{$\blacksquare$ Gelb} & \gls{vcc} & $5\si{\volt}$ \\
+        \hline
+        3 & \textcolor{ForestGreen}{$\blacksquare$ Grün} & Tach & \gls{nc} \\
+        \hline
+        4 & \textcolor{blue}{$\blacksquare$ Blau} & \gls{pwm} & \gls{pwm} von \texttt{555} \\
+        \hline
+    \end{tabular}
+    \caption{\gls{pwm} Lüfter Pinout Tabelle}
+    \label{tab:fan-pinout}
+\end{table}
