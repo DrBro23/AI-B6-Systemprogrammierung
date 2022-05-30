@@ -26,16 +26,23 @@ Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflö
 Um einen Messwert zu einer Temperatur zu konvertieren müssen zuerst zwei Byte gelesen werden.
 Diese müssen zu einem 16-Bit Wert, welcher den ogrinellen 13-Bit Messwert beinhaltet, konkatiniert werden.
 Anschlie{\ss}end muss der Messwert linear abgebildet werden, dass hei{\ss}t mit der Auflösung pro \gls{lsb} multiplizieren.
-Die \gls{fpu} sollte unter allen Umständen nicht aus dem Kernelspace verwendet werden, 
+Die \gls{fpu} sollte unter allen Umständen nicht aus dem Kernelspace verwendet werden,
 da die Kontextänderung abträgliche Performanceimplikationen auf Userspace Applikationen mit sich führen kann.
-Die Berechnung wird folglich mit der Integerdivision des Kehrwerts wie in Formel \autoref{eq:temp-convert} ausgeführt.
-Der absolute Fehler wird in \autoref{fig:rounding-err} visualisiert.
+Die berechnung wird folglich mit der Integerdivision des Kehrwerts wie in \autoref{eq:temp-convert} ausgeführt.
+Der Fehler der Berechnung wird in \autoref{eq:temp-error} aufgeführt und in \autoref{fig:rounding-err} visualisiert.
 Der resultierende Rundungsfehler manifestiert sich als Rauschen.
-Da unsere Anwednung sich nominal bei und über Raumtemperatur in einer Stellen- Präzision agiert sind die resultierenden Fehler vernachlässigbar.
+Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen Präzision agiert sind die resultierenden Fehler vernachlässigbar.
 
 \begin{equation}
     \vartheta = \texttt{M}_D \cdot 0.0625\si{\celsius} = \frac{\texttt{M}_D}{\left(0.0625\si{\celsius}\right)^{-1}} \approx \text{int}\left(\frac{\texttt{M}_D}{16\si{\per\celsius}}\right)
     \label{eq:temp-convert}
+\end{equation}
+\begin{equation}
+    \begin{aligned}
+        \Delta_{\texttt{M}_D} &= \frac{\texttt{M}_D}{16} - \text{int}\left(\frac{\texttt{M}_D}{16}\right) \\[2ex]
+        \delta_{\texttt{M}_D} &= \frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16} } \\[2ex]
+    \end{aligned}
+    \label{eq:temp-error}
 \end{equation}
 \begin{figure}
     \centering
