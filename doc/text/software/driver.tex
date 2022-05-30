@@ -22,16 +22,16 @@ if(test_i2c_client != NULL)	{
 }
 \end{lstlisting}
 
-Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflösung von $0.0625\si{\degree C}$ am \gls{lsb}.
+Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflösung von $0.0625\si{\degree C}$ am \gls{lsb} an.
 Um einen Messwert zu einer Temperatur zu konvertieren müssen zuerst zwei Byte gelesen werden.
-Diese müssen zu einem 16-Bit Wert, welcher den ogrinellen 13-Bit Messwert, behinhält konkatiniert werden.
+Diese müssen zu einem 16-Bit Wert, welcher den ogrinellen 13-Bit Messwert beinhaltet, konkatiniert werden.
 Anschlie{\ss}end muss der Messwert linear abgebildet werden, dass hei{\ss}t mit der Auflösung pro \gls{lsb} multiplizieren.
-Die \gls{fpu} sollte unter allen Umständen nicht aus dem Kernelspace verwendet werden.
-Da die Kontextänderung abträgliche Performanceimplikationen auf Userspace Applikationen mit sich führen kann.
-Die berechnung wird folglich mit der Integerdivision des Kehrwerts wie in \autoref{eq:temp-convert} ausgeführt.
+Die \gls{fpu} sollte unter allen Umständen nicht aus dem Kernelspace verwendet werden, 
+da die Kontextänderung abträgliche Performanceimplikationen auf Userspace Applikationen mit sich führen kann.
+Die Berechnung wird folglich mit der Integerdivision des Kehrwerts wie in Formel \autoref{eq:temp-convert} ausgeführt.
 Der absolute Fehler wird in \autoref{fig:rounding-err} visualisiert.
 Der resultierende Rundungsfehler manifestiert sich als Rauschen.
-Da unsere Anwednung sich nominal bei und über Raumtemperatur in einer-Stellen Präzision agiert sind die resultierenden Fehler vernachlässigbar.
+Da unsere Anwednung sich nominal bei und über Raumtemperatur in einer Stellen- Präzision agiert sind die resultierenden Fehler vernachlässigbar.
 
 \begin{equation}
     \vartheta = \texttt{M}_D \cdot 0.0625\si{\celsius} = \frac{\texttt{M}_D}{\left(0.0625\si{\celsius}\right)^{-1}} \approx \text{int}\left(\frac{\texttt{M}_D}{16\si{\per\celsius}}\right)
@@ -98,7 +98,7 @@ Der Treiber zur Kommunikation über \gls{spi} funktioniert, kann jedoch aufgrund
 Um dies zu umgehen muss der Zugriff auf die \gls{ss} Signale durch die durch das System bereitgestellten Treiber unterbunden werden.
 
 Dazu wird der Devicetree zur Laufzeit mit einem Patch injeziert.
-Dadurch stehen die \gls{ss} Signale frei zur verfügung um durch unseren Treiber aus dem Kernelspace genutzt zu werden.
+Deswegen stehen die \gls{ss} Signale frei zur Verfügung, um durch unseren Treiber aus dem Kernelspace genutzt zu werden.
 Das Devicetree Overlay wird mit dem devicetree compiler kompiliert:
 \begin{lstlisting}
 dtc spidev_disabler.dts -O dtb < spidev_disabler.dtbo

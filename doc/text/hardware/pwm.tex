@@ -1,7 +1,7 @@
 \subsection{\Acrshort{pwm}-Erzeugung}
 
 Um die Geschiwindigkeit eines Lüfters zu regulieren, wird dieser mit einem \gls{pwm} Signal gesteuert.
-Die Pulsweite ist proportional zur resultierenden Ziel Geschiwindigkeit.
+Die Pulsweite ist proportional zur resultierenden Zielgeschiwindigkeit.
 Der \gls{rpi} hat interne Hardware um \gls{pwm} Signale zu generieren.
 Diese sind jedoch nicht trivial aus dem Kernelspace erreichbar.
 
@@ -134,13 +134,13 @@ Die Pins werden wie in \autoref{tab:spi} verbunden.
 
 Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
 Um deren Wiederstandswert einzustellen müssen zwei Bytes über \gls{spi} gesendet werden.
-Das erste Stellt das Command-Byte dar.
-Das zweite die tatsächlichen Daten.
+Das erste Byte stellt das Command-Byte dar.
+Das zweite Byte die tatsächlichen Daten.
 Die in \autoref{spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus dem Command-Byte und aus einem folgenden Datenbyte zusammen.
 Die Bedeutung des Command-Byte wird in \autoref{command-bits} erklärt.
 Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
-Der resultierende Wiederstand zwischen Anschluss A und W kann mit \autoref{eq:resistance1} berechnet werden.
-Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
+Der resultierende Wiederstand zwischen Anschluss A und W kann mit der Formel \autoref{eq:resistance1} berechnet werden.
+Der Wiederstand zwischen B und W ist mit der Formel \autoref{eq:resistance2} zu berechenen.
 
 \begin{equation}
     R_{\text{\text{WA}}}(D_{\text{n}}) = \frac{(R_{\text{AB}}) (256 - D_{\text{n}})}{256} + R_{\text{W}}
@@ -226,13 +226,13 @@ Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \text
 \texttt{DIS} ist Open-Drain womit der High-Pegel zu einer belibigen Spannung eingestellt werden kann.
 Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
 Folglich ist eine berechnung von $f$ nicht möglich
-\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
+\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
 Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
 
 \subsubsection{Lüfterkontrolle mit \acrshort{pwm}}
 
 Zur Kühlung wird ein \textit{NF-A4x20} 4-Poliger \gls{pwm} Lüfter von \textit{Noctua} aus \autoref{fig:fan-pic} verwendet.
-Dieser benötigt eine Gleichspannung von $5\si{\volt}$ und wird mit einem \gls{pwm} Signal mit einer Amplitude von $5\si{\volt}$.
+Dieser benötigt eine Gleichspannung von $5\si{\volt}$ und wird mit einem \gls{pwm} Signal mit einer Amplitude von $5\si{\volt}$ angesteuert.
 Das Tacho-Signal wird nicht verwendet.
 Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
 

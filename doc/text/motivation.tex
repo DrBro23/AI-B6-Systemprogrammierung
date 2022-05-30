@@ -10,10 +10,10 @@ Je nach Erwärmung wird die Drehgeschwindigkeit des Lüfters beeinflusst.
 Hierbei versucht der Lüfter die Temperatur um den Temperatursensor auf normale Umgebungstemperatur herunter zu kühlen.
 
 Das Projekt besteht aus der Applikation im Userspace und dem Treiber im Kernelspace.
-Der Treiber kommuniziert mit \gls{i2c} und \gls{spi} mit Hardwarepäripherie.
-Die Schnittstelle zwischen Kernelspace und Userspace wird durch sowohl \gls{fops} und \gls{ioctl} ermöglicht.
+Der Treiber kommuniziert mit \gls{i2c} und \gls{spi} mit der Hardwareperipherie.
+Die Schnittstelle zwischen Kernelspace und Userspace wird sowohl durch \gls{fops} und \gls{ioctl} ermöglicht.
 \autoref{fig:block} beschreibt den abstrakten Aufbau des Projekt.
-Im Folgenden Dokument wird der Aufbau von sowohl der Software als auch der Hardware erklärt.
+Im Folgenden Dokument wird der Aufbau von der Software, als auch der Hardware erklärt.
 
 \begin{figure}[h]
     \centering
