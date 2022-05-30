@@ -1,11 +1,44 @@
 \section{Motivation}
-Im sechsten Semesters des Studiengangs Angewandte Informatik wird im Fach Systemprogrammierung die Anwendung eines Linux Treibers gelehrt.
-Hierbei entsteht die Möglichkeit die Kenntnisse der Treiberprogrammierung im Rahmen einer Prüfungsstudienarbeit weiter zu vertiefen.
+% Im sechsten Semesters des Studiengangs Angewandte Informatik wird im Fach Systemprogrammierung die Anwendung eines Linux Treibers gelehrt.
+% Hierbei entsteht die Möglichkeit die Kenntnisse der Treiberprogrammierung im Rahmen einer Prüfungsstudienarbeit weiter zu vertiefen.
 
-Das Thema der Studienarbeit ist die Programmierung eines Gerätetreibers für eine Lüftersteuerung mit Temperatursensor.
-Zum Einsatz kommen ein Raspberry Pi 4b als Basis, ein Noctua NF-A4x20 5V PWM Lüfter mit vier Pins und ein digitaler Temperatursensor TMP102 von SparkFun.
-
-Funktionsweise:
-Der Temperatursensor misst seine normale Umgebungstemperatur.
+Das Thema dieser Studienarbeit ist die Programmierung eines Gerätetreibers für Linux.
+Dieses Projekt implementiert eine Lüftersteuerung mit Temperatursensor.
+Zum Einsatz kommen ein \gls{rpi} 4b, ein Noctua NF-A4x20 5V \gls{pwm} Lüfter mit vier Pins und ein digitaler Temperatursensor \texttt{TMP102}.
+Der Temperatursensor misst die momentane Umbgebungstemperatur.
 Je nach Erwärmung wird die Drehgeschwindigkeit des Lüfters beeinflusst.
 Hierbei versucht der Lüfter die Temperatur um den Temperatursensor auf normale Umgebungstemperatur herunter zu kühlen.
+
+Das Projekt besteht aus der Applikation im Userspace und dem Treiber im Kernelspace.
+Der Treiber kommuniziert mit \gls{i2c} und \gls{spi} mit Hardwarepäripherie.
+Die Schnittstelle zwischen Kernelspace und Userspace wird durch sowohl \gls{fops} und \gls{ioctl} ermöglicht.
+\autoref{fig:block} beschreibt den abstrakten Aufbau des Projekt.
+Im Folgenden Dokument wird der Aufbau von sowohl der Software als auch der Hardware erklärt.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        \draw (0,1) node {};
+        \draw (0,-10) node {};
+        \draw[fill=black!20!white, draw, thick] (-3,0.5) rectangle ++(6cm,-5cm);
+        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=6cm] (app) {Applikation (Userspace)};
+        \node[minimum height=1cm, minimum width=6cm, below of=app] (fops) {\acrshort{fops} oder \acrshort{ioctl}};
+        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=5cm, below of=fops] (driver) {Fanctrl (Kernelspace)};
+        \node[minimum height=1cm, minimum width=6cm, below of=driver] (kernel) {Linux Kernel};
+        \node[fill=black!20!white, thick, draw, minimum height=1cm, minimum width=6cm, below of=kernel] (hardware) {\gls{rpi} Hardware};
+        \node[below= 1cm of hardware] (sensor) {};
+        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, left = 0.2cm of sensor] (tmp) {\texttt{TMP201}};
+        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, right = 0.2cm of sensor] (mcp) {\texttt{MCP41XXX}};
+        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, below of=mcp] (pwm) {\texttt{555} PWM};
+        \node[fill=black!20!white, thick, draw, minimum height=1cm, minimum width=6cm, below = 2cm of sensor] (fan) {Lüfter};
+        \draw[black, very thick, ->] (pwm) -- ++(0,-1.15cm) node[above left] {\acrshort{pwm}};
+        \draw[black, very thick, <-] (tmp) -- ++(0,-2.15cm) node[left, pos=0.5] {Luft};
+
+        \draw[black, very thick, <-] (mcp) -- ++(0,1.15cm) node[below left] {\acrshort{spi}};
+        \draw[black, very thick ,<->] (tmp) -- ++(0,1.15cm) node[below left] {\acrshort{i2c}};
+        \draw[black, thick, ->] (-4cm, 0) node[left] {Hohe Abstraktion} -- ++(0,-3cm) node[left] {Niedrige Abstraktion};
+        \draw[black, thick] (-4cm, -4cm) -- ++(0,-5cm) node[left, pos=0.5] {Hardware};
+    \end{tikzpicture}
+    \caption[Blockschaltbild des \texttt{Fanctrl} Projekts]{Blockschaltbild des \texttt{Fanctrl} Projekts. Die in rot abgebildeten Lagen sind eigens implementiert.}
+    \label{fig:block}
+\end{figure}
