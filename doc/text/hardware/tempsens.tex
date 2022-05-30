@@ -1,49 +1,74 @@
 \subsection{Temperatursensor}
-Beim Temperatursensor handelt es sich um einen \gls{tmp102} der Firma SparkFun.
+Beim Temperatursensor handelt es sich um einen \texttt{TMP102} der Firma Texas Instruments auf einem \gls{breakout} von Sparkfun.
 Dieser hat einen Einsatzbereich von -40 bis 125°C und wird mit \gls{i2c} angesteuert. \\
 Auf dem Sensor stehen folgende Pins zur Verfügung: \\
-\gls{scl}, \gls{sda}, \gls{vcc}, \gls{gnd}, \gls{alert}, \gls{add} \\
+\gls{scl}, \gls{sda}, \gls{vcc}, \gls{gnd}, \texttt{Alert}, \texttt{Add0} \\
 
 % TODO: Blockschaltbild vlt?
 Der Sensor benötigt \gls{vcc} und \gls{gnd} für die Spannungsversorgung, sowie \gls{scl} und \gls{sda} für die Kommunikation.
-Die Pins werden mit dem \gls{rpi} folgendermaßen verbunden: \\
-\begin{table}
+Die Pins werden mit dem \gls{rpi} wie in \autoref{tab:i2c} verbunden.
+
+\begin{table}[h]
     \centering
-    \begin{tabular}{|l|l|l|l|l|l|}
+    \begin{tabular}{|r||l|l|l|l|l|l|}
         \hline
-        \textbf{\gls{scl}} & \textbf{\gls{sda}} & \textbf{\gls{vcc}} & \textbf{\gls{gnd}} & \textbf{\gls{alert}} & \textbf{\gls{add}}\\
+        \textbf{Funktion} & \textbf{\gls{scl}} & \textbf{\gls{sda}} & \textbf{\gls{vcc}} & \textbf{\gls{gnd}} & \textbf{\texttt{Alert}} & \textbf{\texttt{Add0}}\\
         \hline
         \hline
-        GPIO3 & GPIO2 & & & None & None \\
+        \gls{rpi} Pin Name & GPIO3 & GPIO2 & & & None & None \\
         \hline
-        Pin5 & Pin3 & Pin2 & Pin14 & None & None \\
+        \gls{rpi} Pin Number & Pin5 & Pin3 & Pin2 & Pin14 & None & None \\
         \hline
     \end{tabular}
-    \caption{\gls{i2c} Pinout Tabelle}\label{i2cpinout}
-    \quad
+    \caption{\gls{i2c} Pinout Tabelle}
+    \label{tab:i2c}
 \end{table}
 
+Der \texttt{Alert} Pin ist unbenutzt und wird daher nicht verbunden.
+Der \texttt{Add0} Pin stellt das \gls{lsb} der \gls{i2c} Addresse ein.
+Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern angeschlossen werden.
 
 \subsubsection{Hardwareanschluss}
 Die Schaltung des digitalen Potentiometers wird direkt an den \gls{rpi} angeschlossen. \\
-Die Pins werden folgendermaßen verbunden: \\
-\begin{table}
+Die Pins werden wie in \autoref{tab:spi} verbunden.
+\begin{table}[h]
     \centering
-    \begin{tabular}{|l|l|l|l|}
+    \begin{tabular}{|r||l|l|l|l|l|}
         \hline
-        \textbf{\gls{mosi}} & \textbf{\gls{miso}} & \textbf{\gls{sclk}} & \textbf{\gls{ss}} \\
+        \textbf{Funktion} & \textbf{\acrshort{mosi}} & \textbf{\acrshort{miso}} & \textbf{\acrshort{vcc}} & \textbf{\acrshort{sclk}} & \textbf{\acrshort{ss}} \\
         \hline
         \hline
-        GPIO10 & GPIO9 & 5V Power & GPIO11 & GPIO8 \\
+        \gls{rpi} Pin Name & GPIO10 & GPIO9 & 5V Power & GPIO11 & GPIO8 \\
         \hline
-        Pin19 & Pin21 & Pin2 & Pin23 & Pin24 \\
+        \gls{rpi} Pin Number & Pin19 & Pin21 & Pin2 & Pin23 & Pin24 \\
         \hline
     \end{tabular}
-    \caption{\gls{spi} Pinout Tabelle}\label{spipinout}
-    \quad
+    \caption{\gls{spi} Pinout Tabelle}
+    \label{tab:spi}
 \end{table}
 
 \subsubsection{I\textsuperscript{2}C Bus}
+
+Die $7$-Bit \gls{i2c} Addresse verhält sich wie in \autoref{tab:address} angegeben.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|r|l|}
+        \hline
+        \textbf{Device Address} & \textbf{\texttt{Add0} Pin}\\
+        \hline
+        \hline
+        \texttt{1001000} & \gls{gnd} \\
+        \hline
+        \texttt{1001001} & \gls{vcc} \\
+        \hline
+        \texttt{1001010} & \gls{sda} \\
+        \hline
+        \texttt{1001011} & \gls{scl} \\
+        \hline
+    \end{tabular}
+    \caption{\texttt{TMP102} \gls{i2c} \texttt{Add0} Addresse}
+    \label{tab:address}
+\end{table}
 
 \begin{figure}
     \begin{center}
