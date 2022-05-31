@@ -11,6 +11,7 @@ Die Pulsweite wird durch ein \texttt{MCP41XXX} digitales Potentiometer über \gl
 Folglich ist die Lüftergeschwindigkeit proportional zur Pulsweite und proportional zum eingestellten Wiederstand.
 
 \subsubsection{SPI Bus}
+
 SPI ist ein synchroner, serieller Datenbus mit der Funktionsweise nach dem Master-Slave-Prinzip.
 Die vier wichtigsten Leitungen sind \gls{sclk}, \gls{mosi}, \gls{miso} und \gls{ss}.
 Die \gls{sclk} gibt einen Takt mit einer möglichen Frequenz bis $\si{\mHz}$ aus, welche zur Synchronisation vom Controller benötigt wird. Dieses Signale wird vom Master ausgegeben.
@@ -22,10 +23,7 @@ Mit jedem \gls{sclk} Takt wird ein Bit von Master auf Slave übertragen.
 Nach Beenden der Übertragung toggelt der \gls{ss} wieder auf logisch 1.
 Dies funktioniert mit der \gls{miso} Leitung vice versa.
 
-% TODO
-% Erklären wie SPI geht, auf figure verweisen
-
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
     \begin{tikztimingtable}[%
         timing/dslope=0.2,
@@ -56,6 +54,16 @@ Dies funktioniert mit der \gls{miso} Leitung vice versa.
 Die Schaltung des digitalen Potentiometers wird direkt an den \gls{rpi} angeschlossen.
 Die Pins werden wie in \autoref{tab:spi} verbunden.
 
+Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
+Um deren Wiederstandswert einzustellen müssen zwei Bytes über \gls{spi} gesendet werden.
+Das erste Byte stellt das Command-Byte dar.
+Das zweite Byte die tatsächlichen Daten.
+Die in \autoref{fig:spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus dem Command-Byte und aus einem folgenden Datenbyte zusammen.
+Die Bedeutung des Command-Byte wird in \autoref{tab:command-bits} erklärt.
+Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
+Der resultierende Wiederstand zwischen Anschluss A und W kann mit der \autoref{eq:resistance1} berechnet werden.
+Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
+
 \begin{table}
     \centering
     \begin{tabular}{|r||l|l|l|l|l|}
@@ -65,13 +73,12 @@ Die Pins werden wie in \autoref{tab:spi} verbunden.
         \hline
         \gls{rpi} Pin Name & GPIO10 & GPIO9 & 5V Power & GPIO11 & GPIO8 \\
         \hline
-        \gls{rpi} Pin Number & Pin19 & Pin21 & Pin2 & Pin23 & Pin24 \\
+        \gls{rpi} Pin Nummer & Pin19 & Pin21 & Pin2 & Pin23 & Pin24 \\
         \hline
     \end{tabular}
     \caption{\gls{spi} Pinout Tabelle}
     \label{tab:spi}
 \end{table}
-
 
 \begin{figure}
     \begin{center}
@@ -142,16 +149,7 @@ Die Pins werden wie in \autoref{tab:spi} verbunden.
     \label{tab:command-bits}
 \end{table}
 
-Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
-Um deren Wiederstandswert einzustellen müssen zwei Bytes über \gls{spi} gesendet werden.
-Das erste Byte stellt das Command-Byte dar.
-Das zweite Byte die tatsächlichen Daten.
-Die in \autoref{fig:spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus dem Command-Byte und aus einem folgenden Datenbyte zusammen.
-Die Bedeutung des Command-Byte wird in \autoref{tab:command-bits} erklärt.
-Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
-Der resultierende Wiederstand zwischen Anschluss A und W kann mit der \autoref{eq:resistance1} berechnet werden.
-Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
-
+\begin{samepage}
 \begin{equation}
     R_{\text{\text{WA}}}(D_{\text{n}}) = \frac{(R_{\text{AB}}) (256 - D_{\text{n}})}{256} + R_{\text{W}}
     \label{eq:resistance1}
@@ -166,8 +164,18 @@ wobei
     R_{\text{W}} &: \text{Wiper Wiederstand, nominal: } 52\si{\ohm}  \\
     D_{\text{n}} &: \text{Dezimalwert des Wiperregisters: } 0_{10} \leq D_{\text{n}} \leq 255_{10}
 \end{align*}
+\end{samepage}
 
 \subsubsection{555 Timer}
+
+Der Timer ist in einer astabilen Konfiguration verbunden.
+Der Timer erwartet lediglich eine Positive Spannung über $U+$ zu $U-$ von $3.3\si{\volt}$.
+Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \texttt{DIS}, oder auch and Pin 3, \texttt{OUT}, gegben.
+\texttt{DIS} ist Open-Drain womit der High-Pegel zu einer belibigen Spannung eingestellt werden kann.
+Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
+Folglich ist eine berechnung von $f$ nicht möglich
+\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
+Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
 
 \begin{figure}
     \centering
@@ -175,7 +183,6 @@ wobei
         %Global Config
         font=\small
     ]
-
     %You can create an smart objet like Henry Menke in this post http://www.texample.net/tikz/examples/4-bit-counter/
     % Variables: 1: Position 2: ID.
     \def\TIMER555(#1)#2{%
@@ -230,15 +237,6 @@ wobei
     \label{fig:ne555-pwm}
 \end{figure}
 
-Der Timer ist in einer astabilen Konfiguration verbunden.
-Der Timer erwartet lediglich eine Positive Spannung über $U+$ zu $U-$ von $3.3\si{\volt}$.
-Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \texttt{DIS}, oder auch and Pin 3, \texttt{OUT}, gegben.
-\texttt{DIS} ist Open-Drain womit der High-Pegel zu einer belibigen Spannung eingestellt werden kann.
-Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
-Folglich ist eine berechnung von $f$ nicht möglich
-\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
-Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
-
 \subsubsection{Lüfterkontrolle mit \acrshort{pwm}}
 
 Zur Kühlung wird ein \textit{NF-A4x20} 4-Poliger \gls{pwm} Lüfter von \textit{Noctua} aus \autoref{fig:fan-pic} verwendet.
@@ -246,7 +244,7 @@ Dieser benötigt eine Gleichspannung von $5\si{\volt}$ und wird mit einem \gls{p
 Das Tacho-Signal wird nicht verwendet.
 Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=6cm]{./pic/noctua-1.jpg}
@@ -258,7 +256,7 @@ Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
     \label{fig:fan-pic}
 \end{figure}
 
-\begin{table}
+\begin{table}[h]
     \centering
     \begin{tabular}{|l|l|l|l|}
         \hline

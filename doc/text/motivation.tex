@@ -32,7 +32,7 @@ Im Folgenden Dokument wird der Aufbau von der Software, als auch der Hardware er
         \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, below of=mcp] (pwm) {\texttt{555} PWM};
         \node[fill=black!20!white, thick, draw, minimum height=1cm, minimum width=6cm, below = 2cm of sensor] (fan) {Lüfter};
         \draw[black, very thick, ->] (pwm) -- ++(0,-1.15cm) node[above left] {\acrshort{pwm}};
-        \draw[black, very thick, <-] (tmp) -- ++(0,-2.15cm) node[left, pos=0.5] {Luft};
+        \draw[black, very thick, <-] (tmp) -- ++(0,-2.15cm) node[left, pos=0.5] {Luft\textregistered};
 
         \draw[black, very thick, <-] (mcp) -- ++(0,1.15cm) node[below left] {\acrshort{spi}};
         \draw[black, very thick ,<->] (tmp) -- ++(0,1.15cm) node[below left] {\acrshort{i2c}};
