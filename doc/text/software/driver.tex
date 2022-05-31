@@ -34,12 +34,12 @@ Der resultierende Rundungsfehler manifestiert sich als Rauschen.
 Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen Präzision agiert sind die resultierenden Fehler vernachlässigbar.
 
 \begin{equation}
-    \vartheta = \texttt{M}_D \cdot 0.0625\si{\celsius} = \frac{\texttt{M}_D}{\left(0.0625\si{\celsius}\right)^{-1}} \approx \text{int}\left(\frac{\texttt{M}_D}{16\si{\per\celsius}}\right)
+    \vartheta = \texttt{M}_D \cdot 0.0625\si{\celsius} = \frac{\texttt{M}_D}{\left(0.0625\si{\celsius}\right)^{-1}} \approx \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor
     \label{eq:temp-convert}
 \end{equation}
 \begin{equation}
     \begin{aligned}
-        \Delta_{\texttt{M}_D} &= \frac{\texttt{M}_D}{16} - \text{int}\left(\frac{\texttt{M}_D}{16}\right) \\[2ex]
+        \Delta_{\texttt{M}_D} &= \frac{\texttt{M}_D}{16} - \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor \\[2ex]
         \delta_{\texttt{M}_D} &= \frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16} } \\[2ex]
     \end{aligned}
     \label{eq:temp-error}

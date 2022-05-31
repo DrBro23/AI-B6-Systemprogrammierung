@@ -27,8 +27,8 @@ Im Folgenden Dokument wird der Aufbau von der Software, als auch der Hardware er
         \node[minimum height=1cm, minimum width=6cm, below of=driver] (kernel) {Linux Kernel};
         \node[fill=black!20!white, thick, draw, minimum height=1cm, minimum width=6cm, below of=kernel] (hardware) {\gls{rpi} Hardware};
         \node[below= 1cm of hardware] (sensor) {};
-        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, left = 0.2cm of sensor] (tmp) {\texttt{TMP201}};
-        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, right = 0.2cm of sensor] (mcp) {\texttt{MCP41XXX}};
+        \node[top color=black!20!white, bottom color=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, left = 0.2cm of sensor] (tmp) {\texttt{TMP201}};
+        \node[top color=black!20!white, bottom color=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, right = 0.2cm of sensor] (mcp) {\texttt{MCP41XXX}};
         \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=3cm, below of=mcp] (pwm) {\texttt{555} PWM};
         \node[fill=black!20!white, thick, draw, minimum height=1cm, minimum width=6cm, below = 2cm of sensor] (fan) {Lüfter};
         \draw[black, very thick, ->] (pwm) -- ++(0,-1.15cm) node[above left] {\acrshort{pwm}};

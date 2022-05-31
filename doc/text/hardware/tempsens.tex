@@ -14,7 +14,7 @@ Der \texttt{Alert} Pin ist unbenutzt und wird daher nicht verbunden.
 Der \texttt{Add0} Pin stellt das \gls{lsb} der \gls{i2c} Addresse ein.
 Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern angeschlossen werden.
 
-\begin{table}
+\begin{table}[h]
     \centering
     \begin{tabular}{|r||l|l|l|l|l|l|}
         \hline
@@ -59,32 +59,31 @@ Die $7$-Bit \gls{i2c} Addresse des \texttt{TMP102} verhält sich wie in \autoref
 
 \begin{figure}
     \begin{center}
-\begin{tikztimingtable}[%
-    timing/dslope=0.2,
-    timing/.style={x=1.6ex,y=2ex},
-    x=1ex,
-    timing/rowdist=4ex,
-    timing/c/rising arrows,
-    timing/name/.style={font=\sffamily\scriptsize},
-]
-\busref{SCL} & HHL18{C}L;18{C}LHH\\
-\busref{SDA} & HL;2D{A6};2D{A5};2D{A4};2D{A3};2D{A2};2D{A1};2D{A0};2D{R/W};3D{ACK};2D{D7};2D{D6};2D{D5};2D{D4};2D{D3};2D{D2};2D{D1};2D{D0};3D{ACK};LLH\\
-%
-\extracode
-\begin{pgfonlayer}{background}
-    \begin{scope}[semitransparent ,semithick]
-        \vertlines[darkgray,dotted]{0,3.2 ,...,67.0}%
-        \draw[draw=black,dashed] (0.8,2) rectangle ++(1.6,-6);%
-        \draw node[below] at (1.6, -7ex){\small{Start}};%
-        \draw[draw=black,dashed] (64.8,2) rectangle ++(1.6,-6);%
-        \draw node[below] at (65.6, -7ex){\small{Stop}};%
-    \end{scope}
-    \end{pgfonlayer}
-\end{tikztimingtable}
-\end{center}
-\caption[Eine \gls{i2c} Datenübertragung.]{Eine \gls{i2c} Datenübertragung aus 8 Addressbits und 8 Datenbits.
-Der Busmaster erstellt das \texttt{SCL} Signal und verschickt die Addresse, das Read/Write Bit und die Datenbits.
-Der ausgewählte Slave übernimmt die Acknowledgement Bits.
-Würde der Slave ein \texttt{NACK} übertragen, müsste der Master die vorheringen 8 Bits wiederhohlen.}
-\label{i2c-transaction}
+    \begin{tikztimingtable}[%
+        timing/dslope=0.2,
+        timing/.style={x=1.6ex,y=2ex},
+        x=1ex,
+        timing/rowdist=4ex,
+        timing/c/rising arrows,
+        timing/name/.style={font=\sffamily\scriptsize},
+    ]
+    \busref{SCL} & HHL18{C}L;18{C}LHH\\
+    \busref{SDA} & HL;2D{A6};2D{A5};2D{A4};2D{A3};2D{A2};2D{A1};2D{A0};2D{R/W};3D{ACK};2D{D7};2D{D6};2D{D5};2D{D4};2D{D3};2D{D2};2D{D1};2D{D0};3D{ACK};LLH\\
+    \extracode
+    \begin{pgfonlayer}{background}
+        \begin{scope}[semitransparent ,semithick]
+            \vertlines[darkgray,dotted]{0,3.2 ,...,67.0}%
+            \draw[draw=black,dashed] (0.8,2) rectangle ++(1.6,-6);%
+            \draw node[below] at (1.6, -7ex){\small{Start}};%
+            \draw[draw=black,dashed] (64.8,2) rectangle ++(1.6,-6);%
+            \draw node[below] at (65.6, -7ex){\small{Stop}};%
+        \end{scope}
+        \end{pgfonlayer}
+    \end{tikztimingtable}
+    \end{center}
+    \caption[Eine \gls{i2c} Datenübertragung.]{Eine \gls{i2c} Datenübertragung aus 8 Addressbits und 8 Datenbits.
+    Der Busmaster erstellt das \texttt{SCL} Signal und verschickt die Addresse, das Read/Write Bit und die Datenbits.
+    Der ausgewählte Slave übernimmt die Acknowledgement Bits.
+    Würde der Slave ein \texttt{NACK} übertragen, müsste der Master die vorheringen 8 Bits wiederhohlen.}
+    \label{fig:i2c-transaction}
 \end{figure}

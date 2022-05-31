@@ -38,7 +38,7 @@ Folglich ist die Lüftergeschwindigkeit proportional zur Pulsweite und proportio
     \end{tikztimingtable}
     \end{center}
     \caption[Eine \gls{spi} Datenübertragung.]{Eine \gls{spi} Datenübertragung von 8 Bits}
-    \label{spi-transaction}
+    \label{fig:spi-transaction}
 \end{figure}
 
 \subsubsection{MCP41XXX Digitales Potentiometer}
@@ -86,7 +86,7 @@ Die Pins werden wie in \autoref{tab:spi} verbunden.
     \end{tikztimingtable}
     \end{center}
     \caption[Eine \gls{spi} Datenübertragung für ein MCP41XXX Potentiometer]{Eine \gls{spi} Datenübertragung für ein MCP41XXX Potentiometer}
-    \label{spi-mcp-transaction}
+    \label{fig:spi-mcp-transaction}
 \end{figure}
 
 \begin{table}
@@ -129,15 +129,15 @@ Die Pins werden wie in \autoref{tab:spi} verbunden.
         \caption{Potentiometer bits}\label{command:1b}
     \end{subtable}
     \caption{MCP41XXX Command-Byte Bits}
-    \label{command-bits}
+    \label{tab:command-bits}
 \end{table}
 
 Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
 Um deren Wiederstandswert einzustellen müssen zwei Bytes über \gls{spi} gesendet werden.
 Das erste Byte stellt das Command-Byte dar.
 Das zweite Byte die tatsächlichen Daten.
-Die in \autoref{spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus dem Command-Byte und aus einem folgenden Datenbyte zusammen.
-Die Bedeutung des Command-Byte wird in \autoref{command-bits} erklärt.
+Die in \autoref{fig:spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus dem Command-Byte und aus einem folgenden Datenbyte zusammen.
+Die Bedeutung des Command-Byte wird in \autoref{tab:command-bits} erklärt.
 Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
 Der resultierende Wiederstand zwischen Anschluss A und W kann mit der \autoref{eq:resistance1} berechnet werden.
 Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
