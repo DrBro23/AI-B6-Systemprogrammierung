@@ -30,9 +30,29 @@ Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern anges
     \label{tab:i2c}
 \end{table}
 
-\subsubsection{I\textsuperscript{2}C Bus}
+\subsubsection{\acrshort{i2c} Bus}
 
+Der \gls{i2c} Bus ist ein Halbduplex Bus zur Kommunikation zwischen einem Master und belibig vielen Slaves.
+\gls{i2c} Transaktionen bestehen immer aus 8 Bytes.
+Dannach verschickt der Empfänger ein \texttt{ACK} oder \texttt{NACK} Acknowledgement Bit um zu kennzeichen ob die Transaktion erfolgreich war.
+Jede Transaktion wird von dem Busmaster gestartet.
+Dieser schickt zuerst eine 7 Bit Addresse. Das 8. \texttt{R/W} Bit, das \gls{lsb}, gibt an, ob die folgende Operation ein Master Read oder Master Write ist.
+Ein generelles Muster eienr \gls{i2c} Transaktion wird in \autoref{fig:i2c-transaction} angezeigt.
 Die $7$-Bit \gls{i2c} Addresse des \texttt{TMP102} verhält sich wie in \autoref{tab:address} angegeben.
+
+Der \texttt{TMP102} Sensor liefert Messdaten mit 13 Bit Auflösung.
+Da durch \gls{i2c} jedoch nur je 8 Bit gelsen werden können, muss das \texttt{Temperature Register (TR)} an Position $00_H$ zwei mal gelesen werden.
+Die folgenden zwei Bytes müssen dannach zu einem validen Messwert verkettet werden.
+Das zuerst gelesene Byte bildet das \gls{msb}.
+Das folgende Byte hat das \gls{lsb} an 4. Stelle.
+Die Verkettung erfolgt nach \autoref{eq:concat}.
+Möglicherweise geht durch diese Operation das Sign-Bit verloren.
+Für unsere Anwendungen sind negative Temperaturen jedoch nicht relevant.
+
+\begin{equation}
+    \texttt{M}_D := \texttt{TR}_0 \ll 4 \quad \texttt{OR} \quad \texttt{TR}_1 \gg 4
+    \label{eq:concat}
+\end{equation}
 
 \begin{table}[h]
     \centering
@@ -53,9 +73,6 @@ Die $7$-Bit \gls{i2c} Addresse des \texttt{TMP102} verhält sich wie in \autoref
     \caption{\texttt{TMP102} \gls{i2c} \texttt{Add0} Addresse}
     \label{tab:address}
 \end{table}
-
-% TODO
-% Text über den I2C Bus & Protokoll, kurz überfligend erklären und auf die figure verweisen
 
 \begin{figure}
     \begin{center}
