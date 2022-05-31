@@ -11,6 +11,16 @@ Die Pulsweite wird durch ein \texttt{MCP41XXX} digitales Potentiometer über \gl
 Folglich ist die Lüftergeschwindigkeit proportional zur Pulsweite und proportional zum eingestellten Wiederstand.
 
 \subsubsection{SPI Bus}
+SPI ist ein synchroner, serieller Datenbus mit der Funktionsweise nach dem Master-Slave-Prinzip.
+Die vier wichtigsten Leitungen sind \gls{sclk}, \gls{mosi}, \gls{miso} und \gls{ss}.
+Die \gls{sclk} gibt einen Takt mit einer möglichen Frequenz bis $\si{\mHz}$ aus, welche zur Synchronisation vom Controller benötigt wird. Dieses Signale wird vom Master ausgegeben.
+Mit \gls{ss} wird der jeweilige Slave ausgewählt, indem das Signal auf logisch 0 gesetzt wird.
+Daten werden mit der \gls{mosi} Leitung vom Master zum Slave und mit der \gls{miso} Leitung vom Slave zum Master gesendet. \\
+In \autoref{fig:spi-transaction} ist die Funktion von \gls{spi} dargestellt.
+Wenn der Slave ausgewählt wurde, toggelt der \gls{ss} von logisch 1 auf logisch 0.
+Mit jedem \gls{sclk} Takt wird ein Bit von Master auf Slave übertragen.
+Nach Beenden der Übertragung toggelt der \gls{ss} wieder auf logisch 1.
+Dies funktioniert mit der \gls{miso} Leitung vice versa.
 
 % TODO
 % Erklären wie SPI geht, auf figure verweisen
