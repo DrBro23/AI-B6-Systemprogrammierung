@@ -15,7 +15,6 @@ static struct i2c_board_info test_i2c_board_info = {
     I2C_BOARD_INFO(SLAVE_DEVICE_NAME, SLAVE_ADDRESS)};
 
 void tempInit(void) {
-
     test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
 	if(test_i2c_adapter == NULL)	{
 		printk(KERN_CRIT "Fanctrl: No I2C Adapter found");

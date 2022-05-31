@@ -2,25 +2,10 @@
 \subsubsection{Temperatursensor über \acrshort{i2c}}
 
 \Gls{i2c} Adapter Initialisieren.
-\begin{lstlisting}[language=C, , firstnumber=19]
-test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
-if(test_i2c_adapter == NULL)	{
-    printk(KERN_CRIT "Fanctrl: No I2C Adapter found");
-}	else	{
-    printk(KERN_DEBUG "Fanctrl: Found I2C Adapter");
-    test_i2c_client = i2c_new_client_device(test_i2c_adapter, &test_i2c_board_info);
-    i2c_add_driver(&test_driver);
-    i2c_put_adapter(test_i2c_adapter);
-}
-\end{lstlisting}
+\lstinputlisting[firstnumber=17, firstline=17,lastline=27, title=./driver/src/temp.c]{../../driver/src/temp.c}
 
 \Gls{i2c} Adapter De-initialisieren.
-\begin{lstlisting}[language=C, firstnumber=31]
-if(test_i2c_client != NULL)	{
-    i2c_unregister_device(test_i2c_client);
-    i2c_del_driver(&test_driver);
-}
-\end{lstlisting}
+\lstinputlisting[firstnumber=29, firstline=29,lastline=34, title=./driver/src/temp.c]{../../driver/src/temp.c}
 
 Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflösung von $0.0625\si{\degree C}$ am \gls{lsb} an.
 Um einen Messwert zu einer Temperatur zu konvertieren müssen zuerst zwei Byte gelesen werden.
@@ -76,19 +61,7 @@ Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen P
     }
     \label{fig:rounding-err}
 \end{figure}
-\begin{lstlisting}[language=C, firstnumber=39]
-int temp;
-u8 b1, b2;
-
-i2c_smbus_write_byte(test_i2c_client, 0x00);
-b1 = i2c_smbus_read_byte(test_i2c_client);
-b2 = i2c_smbus_read_byte(test_i2c_client);
-
-temp = (u16)((u16)(b1 << 8) | (u16)(b2));
-temp = temp / 16;	// 1 / 0.0625°C = 16
-
-return temp;
-\end{lstlisting}
+\lstinputlisting[firstnumber=37, firstline=37,lastline=49, title=./driver/src/temp.c]{../../driver/src/temp.c}
 
 \subsubsection{Potentiometer über \acrshort{spi}}
 

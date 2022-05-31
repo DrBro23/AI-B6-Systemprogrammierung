@@ -135,10 +135,10 @@
 \usepackage{listings}
 \renewcommand\lstlistingname{Quelltext} % Change language of section name
 \lstset{ % General setup for the package
-    % basicstyle=\small\sffamily,
+    basicstyle=\ttfamily,
     numbers=left,
-    numberstyle=\small,
-    frame=tb,
+    % numberstyle=,
+    frame=shadowbox,
     tabsize=4,
     columns=fixed,
     showstringspaces=true,
@@ -147,7 +147,8 @@
     keepspaces,
     breaklines=true,
     commentstyle=\color{red},
-    keywordstyle=\color{blue}
+    keywordstyle=\color{blue},
+    title=\lstname,
 }
 
 \usepackage[babel=true]{csquotes}
