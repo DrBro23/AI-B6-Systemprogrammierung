@@ -1,10 +1,45 @@
 \subsection{Kernel Treiber}
 
+\begin{wrapfigure}[22]{o}[1cm]{8cm}
 \dirtree{%
-.1 ROOT.
-.2 Level 2.
-.2 Correct format e.g.~DD.MM.YYYY. %% or e.g.\ DD.MM.YYYY.
+.1 /.
+.2 install\_driver.sh.
+.2 .gitignore.
+.2 README.md.
+.2 doc/.
+.2 app/.
+.2 driver/.
+.3 Makefile.
+.3 spidev\_disabler.dts.
+.3 src/.
+.4 fanctrl.c.
+.4 fanctrl.h.
+.4 fops.c.
+.4 fops.h.
+.4 pwm.c.
+.4 pwm.h.
+.4 temp.c.
+.4 temp.h.
 }
+\caption{Ordnerstruktur des Treibers}
+\label{fig:driverdirectory}
+\end{wrapfigure}
+
+Der Code des Kernel-Treibers ist in \texttt{C99} geschrieben.
+Dieser ist Prozessoragnostisch.
+Es werden jedoch existierende low-level Treiber zwischen den Prozessorregistern und Kerenlspace erwartet, die die Kommunikation über \gls{i2c} und \gls{spi} abstrahieren.
+Das Modul an sich ist lediglich von linux-Headern abhängig.
+Der Treiber ist auf verschiedene \texttt{C}-Dateien aufgeteilt.
+Die Struktur des Treibers ist in \autoref{fig:driverdirectory} aufgeführt.
+Der Tatsächliche Quellcode für den Treiber befindet sich lediglich im \texttt{src} Ordner.
+Alle anderen Dateien sind notwendig jedoch kein direkter Teil des Treibers.
+
+Die Haupt-Datei mit dem Anfangspunkt des Treibers ist in \texttt{fanctrl.c}.
+Darin wird das Treibermodul initialisiert, registriert, ausgeführt und schließlich auch de-initialisiert.
+Der Kernel-Treiber kann über sowohl \gls{fops} mit dem Userspace kommunizieren.
+Dies wird in den \texttt{fops.c} und dem dazugehörigen Header implementiert. % TODO add IOCTL
+Die anderen zwei Hauptfunktionen, die Kommunikation über \gls{i2c} und \gls{spi} werden in \texttt{temp.c} und \texttt{pwm.c} respektiv implementiert.
+In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche Dateien und der Kompilierungs/Installationsvorgang beschreiben.
 
 \subsubsection{Temperatursensor über \acrshort{i2c}}
 
