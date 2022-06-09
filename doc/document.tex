@@ -1,5 +1,5 @@
 % Robin Prillwitz 2021
-\documentclass[11pt,leqno,letterpaper]{article}
+\documentclass[11pt,leqno,letterpaper]{scrartcl}
 
 \input{./tex/preamble}
 \input{./tex/bibliography}
@@ -44,11 +44,13 @@
 \tableofcontents
 \thispagestyle{fancy}
 % TABLES
-\newpage
+% \newpage
+\addcontentsline{toc}{section}{Tabellenverzeichnis}%
 \listoftables
 \thispagestyle{fancy}
 % \thispagestyle{empty}
 % FIGURES
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}%
 \listoffigures
 \thispagestyle{fancy}
 % \thispagestyle{empty}
@@ -98,7 +100,7 @@
 % \input{./tex/eidesstatt}
 % \thispagestyle{fancy}
 
-\clearpage
+% \clearpage
 % \begin{appendices}
 % \end{appendices}
 \input{./tex/colophon}
