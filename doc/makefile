@@ -6,7 +6,9 @@ build:
 	for DIR in $(shell find . -maxdepth 1 -mindepth 1 -type d \( ! -name .vscode ! -name binary ! -name venv ! -name tools \) -exec basename '{}' \;) ; do mkdir -p ${OUTPUTDIRECTORY}/$$DIR ; done
 	xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
 	makeglossaries -d ${OUTPUTDIRECTORY} ${MAINFILE}
-	biber --output-directory ${OUTPUTDIRECTORY} ${MAINFILE}
+	# xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
+
+	biber -D --output-directory ${OUTPUTDIRECTORY} ${MAINFILE}
 	xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
 	xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
 	#xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex

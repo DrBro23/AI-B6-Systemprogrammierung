@@ -1,4 +1,11 @@
 \subsection{Kernel Treiber}
+
+\dirtree{%
+.1 ROOT.
+.2 Level 2.
+.2 Correct format e.g.~DD.MM.YYYY. %% or e.g.\ DD.MM.YYYY.
+}
+
 \subsubsection{Temperatursensor über \acrshort{i2c}}
 
 \Gls{i2c} Adapter Initialisieren.
@@ -19,13 +26,13 @@ Der resultierende Rundungsfehler manifestiert sich als Rauschen.
 Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen Präzision agiert sind die resultierenden Fehler vernachlässigbar.
 
 \begin{equation}
-    \vartheta = \texttt{M}_D \cdot 0.0625\si{\celsius} = \frac{\texttt{M}_D}{\left(0.0625\si{\celsius}\right)^{-1}} \approx \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor
+    \vartheta = \texttt{M}_D \cdot 0.0625\si{\celsius} = \frac{\texttt{M}_D}{\left(0.0625\si{\celsius}\right)^{-1}} = \frac{\texttt{M}_D}{16\si{\per\celsius}} \approx \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor
     \label{eq:temp-convert}
 \end{equation}
 \begin{equation}
     \begin{aligned}
-        \Delta_{\texttt{M}_D} &= \frac{\texttt{M}_D}{16} - \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor \\[2ex]
-        \delta_{\texttt{M}_D} &= \frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16} } \\[2ex]
+        \Delta_{\texttt{M}_D} &= \frac{\texttt{M}_D}{16\si{\celsius}} - \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor \\[2ex]
+        \delta_{\texttt{M}_D} &= \frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16\si{\celsius}} } \\[2ex]
     \end{aligned}
     \label{eq:temp-error}
 \end{equation}
@@ -93,3 +100,13 @@ sudo dtoverlay -d . spidev_disabler
 \subsubsection{\Acrshort{ioctl}}
 
 \subsubsection{Kompilierung und Verlinkung}
+
+Der Treiber kann automatisch kompiliert und als Kernel Objekt verlinkt werden.
+Danach kann das erstelle Kernel Objekt auch geladen werden.
+\begin{lstlisting}
+    make all
+    sudo insmod fanctrl.ko
+\end{lstlisting}
+
+Um den Entwicklungslebenszyklus zu vereinfachen besteht auch die Möglichkeit den gesamten Zyklus automatisch auszuführen.
+Mit dem \texttt{install\_driver.sh} Skript wird das Kernelmodul entladen, neu kompiliert, das Devicetree Overlay neu geladen und das Kernel Modul wieder neu geladen.
