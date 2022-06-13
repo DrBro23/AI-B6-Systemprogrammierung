@@ -4,6 +4,7 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
+#include <linux/ioctl.h>
 #include <linux/slab.h>
 #include <linux/i2c.h>
 #include <linux/gpio.h>
@@ -12,10 +13,21 @@
 #include "temp.h"
 #include "pwm.h"
 #include "fops.h"
+#include "ioctrl.h"
 
 static int __init dev_init(void);
 static void __exit dev_exit(void);
 
+dev_t myDeviceNr;
+struct class *myClass;
+struct cdev myDevice;
+
+struct file_operations fops = {
+	.owner = THIS_MODULE,
+	.read = dev_read,
+	.write = dev_write,
+	.unlocked_ioctl = dev_ioctl,
+};
 
 int __init dev_init(void)
 {
@@ -27,7 +39,14 @@ int __init dev_init(void)
 	pwmDeinit();
 	pwmInit();
 
-	fops_init();
+	printk(KERN_DEBUG "Fanctrl: Starting FOPS");
+
+	alloc_chrdev_region(&myDeviceNr, 0, 1, DRIVER_NAME);
+	myClass = class_create(THIS_MODULE, DRIVER_CLASS);
+	myClass->dev_uevent = dev_uevent;
+	device_create(myClass, NULL, myDeviceNr, NULL, DRIVER_NAME);
+	cdev_init(&myDevice, &fops);
+	cdev_add(&myDevice, myDeviceNr, 1);
 
 	printk(KERN_INFO "Fanctrl: Init Done");
 
@@ -41,7 +60,12 @@ void __exit dev_exit(void)
 	tempDeinit();
 	pwmDeinit();
 
-	fops_deinit();
+	printk(KERN_DEBUG "Fanctrl: stopping FOPS");
+
+    cdev_del(&myDevice);
+    device_destroy(myClass, myDeviceNr);
+    class_destroy(myClass);
+    unregister_chrdev_region(myDeviceNr, 1);
 }
 
 module_init(dev_init);

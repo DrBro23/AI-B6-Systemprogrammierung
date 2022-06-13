@@ -2,18 +2,7 @@
 #include "pwm.h"
 #include "temp.h"
 
-dev_t myDeviceNr;
-struct class *myClass;
-struct cdev myDevice;
-
-struct file_operations fops = {
-	.owner = THIS_MODULE,
-	.read = dev_read,
-	.write = dev_write
-};
-
-
-static int dev_uevent(struct device *dev, struct kobj_uevent_env *env)
+int dev_uevent(struct device *dev, struct kobj_uevent_env *env)
 {
 	add_uevent_var(env, "DEVMODE=%#o", 0666);
 	return 0;
@@ -31,26 +20,6 @@ static unsigned int ToUInt(char* str)
         mult = mult*10;
     }
     return re;
-}
-
-void fops_init(void)    {
-	printk(KERN_DEBUG "Fanctrl: Starting FOPS");
-
-	alloc_chrdev_region(&myDeviceNr, 0, 1, DRIVER_NAME);
-	myClass = class_create(THIS_MODULE, DRIVER_CLASS);
-	myClass->dev_uevent = dev_uevent;
-	device_create(myClass, NULL, myDeviceNr, NULL, DRIVER_NAME);
-	cdev_init(&myDevice, &fops);
-	cdev_add(&myDevice, myDeviceNr, 1);
-}
-
-void fops_deinit(void)  {
-    printk(KERN_DEBUG "Fanctrl: Stopping FOPS");
-
-    cdev_del(&myDevice);
-    device_destroy(myClass, myDeviceNr);
-    class_destroy(myClass);
-    unregister_chrdev_region(myDeviceNr, 1);
 }
 
 ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_t *offset)

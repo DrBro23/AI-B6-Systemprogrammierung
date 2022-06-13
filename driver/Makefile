@@ -1,5 +1,5 @@
 obj-m += fanctrl.o
-fanctrl-objs := ./src/fanctrl.o ./src/temp.o ./src/pwm.o ./src/fops.o
+fanctrl-objs := ./src/fanctrl.o ./src/temp.o ./src/pwm.o ./src/fops.o ./src/ioctrl.o
 
 KDIR = /lib/modules/$(shell uname -r)/build
 PWD = $(shell pwd)
