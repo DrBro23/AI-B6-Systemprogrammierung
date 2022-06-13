@@ -35,9 +35,6 @@ def read_temp():
     fd.close()
     return temp
 
-
-# set_speed(255)
-# read_temp()
 def parse_csv():
     with open(curve, mode ='r') as file:
         csvFile = csv.reader(file, delimiter=",")
@@ -68,7 +65,6 @@ def interpolate_curve(x):
 
 def percentage_to_speed(x):
     return round( MIN_SPEED + ((MAX_SPEED - MIN_SPEED) / (100 - 0)) * (x - 0) )
-
 
 if __name__ == "__main__":
     parse_csv()
