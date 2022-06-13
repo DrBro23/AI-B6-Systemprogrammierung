@@ -42,7 +42,7 @@ u16 readTemp(void) {
 	b1 = i2c_smbus_read_byte(test_i2c_client);
 	b2 = i2c_smbus_read_byte(test_i2c_client);
 
-	temp = (u16)((u16)(b1 << 8) | (u16)(b2));
+	temp = (u16)(((u16)(b1 << 4)) | (((u16)(b2)) >> 4));
 	temp = temp / 16; // 1 / 0.0625°C = 16
 
 	return temp;

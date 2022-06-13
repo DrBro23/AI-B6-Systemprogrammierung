@@ -92,7 +92,7 @@ ssize_t dev_read(struct file *file, char *user_buffer, size_t count, loff_t *off
 
 	// this sould be a floating point division,
 	// however the compiler seems to have certain problems with the FPU
-	len = snprintf(out, sizeof(out), "%d\n", temp / 1000);
+	len = snprintf(out, sizeof(out), "%d°C\r\n", temp);
 	to_copy = min(len, count);
 	not_copied = copy_to_user(user_buffer, out, to_copy);
 
