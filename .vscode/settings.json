@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.asc": "spice",
+        "*.h": "c",
+        "*.c": "c"
+    }
+}
