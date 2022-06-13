@@ -53,7 +53,6 @@ Dies funktioniert mit der \gls{miso} Leitung vice versa.
 
 Die Schaltung des digitalen Potentiometers wird direkt an den \gls{rpi} angeschlossen.
 Die Pins werden wie in \autoref{tab:spi} verbunden.
-
 Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
 Um deren Wiederstandswert einzustellen müssen zwei Bytes über \gls{spi} gesendet werden.
 Das erste Byte stellt das Command-Byte dar.
@@ -64,7 +63,7 @@ Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
 Der resultierende Wiederstand zwischen Anschluss A und W kann mit der \autoref{eq:resistance1} berechnet werden.
 Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
 
-\begin{table}
+\begin{table}[h]
     \centering
     \begin{tabular}{|r||l|l|l|l|l|}
         \hline
@@ -80,7 +79,7 @@ Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
     \label{tab:spi}
 \end{table}
 
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
     \begin{tikztimingtable}[%
         timing/dslope=0.2,
@@ -106,7 +105,7 @@ Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
     \label{fig:spi-mcp-transaction}
 \end{figure}
 
-\begin{table}
+\begin{table}[H]
     \centering
     \begin{subtable}[t]{5cm}
         \centering
@@ -149,6 +148,8 @@ Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
     \label{tab:command-bits}
 \end{table}
 
+\clearpage
+
 \begin{samepage}
 \begin{equation}
     R_{\text{\text{WA}}}(D_{\text{n}}) = \frac{(R_{\text{AB}}) (256 - D_{\text{n}})}{256} + R_{\text{W}}
@@ -173,11 +174,10 @@ Der Timer erwartet lediglich eine Positive Spannung über $U+$ zu $U-$ von $3.3\
 Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \texttt{DIS}, oder auch and Pin 3, \texttt{OUT}, gegben.
 \texttt{DIS} ist Open-Drain womit der High-Pegel zu einer belibigen Spannung eingestellt werden kann.
 Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
-Folglich ist eine berechnung von $f$ nicht möglich
-\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
+Folglich ist eine berechnung von $f$ nicht möglich\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
 Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \begin{tikzpicture}[
         %Global Config
@@ -244,7 +244,7 @@ Dieser benötigt eine Gleichspannung von $5\si{\volt}$ und wird mit einem \gls{p
 Das Tacho-Signal wird nicht verwendet.
 Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=6cm]{./pic/noctua-1.jpg}
@@ -256,7 +256,7 @@ Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
     \label{fig:fan-pic}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[p]
     \centering
     \begin{tabular}{|l|l|l|l|}
         \hline

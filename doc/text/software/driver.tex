@@ -50,12 +50,11 @@ Dannach wird ein neuer \gls{i2c} Device hinzugefügt und der Treiber wird dem Ad
 Der Device beinhält die Informationen über Device Name und Addresse.
 Ist der Adapter initialisiert wird dieser mit \texttt{void tempDeinit(void)} in \label{code:i2c-deinit} zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
 Dabei werden alle vom \gls{i2c} Adapter genutzen Ressourcen für den Treiber frei gegeben.
+Auf dem \gls{rpi} muss \gls{i2c} durch die \texttt{raspi-config} aktiviert werden.
 
-\Gls{i2c} Adapter Initialisieren.
-\lstinputlisting[firstnumber=17, firstline=17,lastline=27, language=C, caption={\texttt{./driver/src/temp.c:17-27}}, label=code:i2c-init]{../../driver/src/temp.c}
+\lstinputlisting[firstnumber=17, firstline=17,lastline=27, language=C, caption={\texttt{./driver/src/temp.c:17-27}}, label=code:i2c-init, float=b]{../../driver/src/temp.c}
 
-\Gls{i2c} Adapter De-initialisieren.
-\lstinputlisting[firstnumber=29, firstline=29,lastline=34, language=C, caption={\texttt{./driver/src/temp.c:29-34}}, label=code:i2c-deinit]{../../driver/src/temp.c}
+\lstinputlisting[firstnumber=29, firstline=29,lastline=34, language=C, caption={\texttt{./driver/src/temp.c:29-34}}, label=code:i2c-deinit, float=b]{../../driver/src/temp.c}
 
 Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflösung von $0.0625\si{\degree C}$ am \gls{lsb} an.
 Um einen Messwert zu einer Temperatur zu konvertieren müssen zuerst zwei Byte gelesen werden.
@@ -75,11 +74,12 @@ Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist i
 \end{equation}
 \begin{equation}
     \begin{aligned}
-        \Delta_{\texttt{M}_D} &= \left|\frac{\texttt{M}_D}{16\si{\celsius}} - \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor\right| \\[2ex]
-        \delta_{\texttt{M}_D} &= \left|\frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16\si{\celsius}} }\right| \\[2ex]
+        \Delta_{\texttt{M}_D} &= \frac{\texttt{M}_D}{16\si{\celsius}} - \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor \\[2ex]
+        \delta_{\texttt{M}_D} &= \frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16\si{\celsius}} }\\[2ex]
     \end{aligned}
     \label{eq:temp-error}
 \end{equation}
+
 \begin{figure}
     \centering
     \begin{tikzpicture}
@@ -113,7 +113,7 @@ Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist i
     \label{fig:rounding-err}
 \end{figure}
 
-\lstinputlisting[firstnumber=37, firstline=37,lastline=49, caption=\texttt{./driver/src/temp.c:37-49}, label=code:i2c-convert]{../../driver/src/temp.c}
+\lstinputlisting[firstnumber=37, firstline=37,lastline=49, caption=\texttt{./driver/src/temp.c:37-49}, label=code:i2c-convert, float]{../../driver/src/temp.c}
 
 \subsubsection{Potentiometer über \acrshort{spi}}
 
