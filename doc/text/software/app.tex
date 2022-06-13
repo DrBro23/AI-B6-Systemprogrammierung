@@ -1,4 +1,24 @@
 \subsection{Applikation}
-\subsubsection{IPC}
-\subsubsubsection{IPC über \acrshort{ioctl}}
-\subsubsection{Anwendung der Daten}
+
+Die Applikation ist ein eigenständiges Programm.
+Dieses kommuniziert mit dem Treiber über \gls{ioctl}.
+Das Programm ist in \textit{Python} implementiert.
+
+\subsubsection{Funktion}
+
+\subsubsection{\acrshort{ipc} über \acrshort{ioctl}}
+
+\subsubsection{Installation und Ausführung}
+
+Zur Ausführung wird eine globale Instanz von \textit{Python} Version \texttt{3.x.x} benötigt.
+Es werden externe Abhängigkeiten benötigt.
+Es wird empfohlen diese in ein lokales \texttt{virtual enviornment} zu installieren um den globalen scope nicht zu vermüllen.
+Der empfohlene Prozess zur Ausführung:
+\begin{lstlisting}
+cd app
+python3 -m venv venv
+source ./venv/bin/activate
+pip install -r requirements.txt
+chmod +x ./app.py #optional
+./app.py
+\end{lstlisting}
