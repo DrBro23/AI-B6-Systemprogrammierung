@@ -4,9 +4,8 @@
 
 Die Applikation ist ein eigenständiges Programm.
 Dieses kommuniziert mit dem Treiber über \gls{ioctl}.
-Das Programm ist in \textit{Python} implementiert.
-
-Das Programm ließt periodisch einen Temperatur-Messwert $\texttt{M}_C[n]$ in \si{\celsius} aus und bildet diesen zu einem \gls{pwm}-Duty Cycle $\texttt{D}[n]$ nach dem Prinzip von \autoref{eq:app}
+Das Programm ist in \textit{Python 3} implementiert.
+Das Programm ließt periodisch einen Temperatur-Messwert $\texttt{M}_C[n]$ in \si{\celsius} aus und bildet diesen zu einem \gls{pwm}-Duty Cycle $\texttt{D}[n]$ nach dem Prinzip von \autoref{eq:app} um.
 \begin{equation}
     f \left( \texttt{M}_C \left[n\right] \right) \rightarrow \texttt{D}\left[n\right]
     \label{eq:app}
@@ -17,7 +16,7 @@ Diese kann sogar von historischen Messdaten $\texttt{M}_C[n-m]$ abhängig sein.
 Unsere implementation realisiert zur Demonstration einen einfachen, kontextfreien, \gls{lut}.
 Dieser beinhält einzelne Eingabe/Ausgabe Wert Datenpaare aus einer \gls{csv} Datei und bestimmt den momentanen Ausgang anhand von linearer Interpolation am Eingangswert.
 Die resultierende Übertragungsfunktion ist eine stückweis lineare Funktion.
-Ein Beispiel dafür ist in \autoref{fig:pcl} dargestellt.
+Ein Beispiel dafür ist in \autoref{fig:pcl} mit den Datenpunkten aus \autoref{tab:pcl} dargestellt.
 
 \begin{figure}
     \centering
@@ -43,6 +42,27 @@ Ein Beispiel dafür ist in \autoref{fig:pcl} dargestellt.
     \caption[Applikations \acrshort{lut} Beispiel]{Applikations \acrshort{lut} Beispiel. Die \textcolor{blue}{blauen Punkte} bilden den \gls{lut}. Die \textcolor{blue}{blaue Linie} zeigt die lineare interpolation. Die \textcolor{red}{rote Intersektion} zeigt einen Beispielswert und dessen dazugehöriges Interpolationsresultat an.}
     \label{fig:pcl}
 \end{figure}
+
+\begin{table}
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{$\texttt{M}_C$ in $\si{\celsius}$} & \textbf{$\texttt{D}$ in $\%$} \\
+        \hline
+        \hline
+        0 & 0 \\
+        \hline
+        20 & 20 \\
+        \hline
+        30 & 50 \\
+        \hline
+        50 & 100 \\
+        \hline
+    \end{tabular}
+    \caption{Beispieltablle für die Übertragungsfunktion aus \autoref{fig:pcl}.}
+    \label{tab:pcl}
+\end{table}
+
 
 \subsubsection{\acrshort{ipc} über \acrshort{ioctl}}
 
