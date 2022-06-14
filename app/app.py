@@ -60,7 +60,7 @@ def interpolate_curve(x):
             max_index = index
 
     interp = curve_points[min_index][1] + (curve_points[max_index][1] - curve_points[min_index][1]) * ((x - min_value) / (max_value - min_value))
-    interp_round = round(interp)
+    interp_round = min(max(round(interp), 0), 100)
     return interp_round
 
 def percentage_to_speed(x):
