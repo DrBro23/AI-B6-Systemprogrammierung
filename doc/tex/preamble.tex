@@ -136,20 +136,28 @@
 \usepackage{listings}
 \renewcommand\lstlistingname{Quelltext} % Change language of section name
 \lstset{ % General setup for the package
-    basicstyle=\ttfamily,
+    basicstyle=,
     numbers=left,
     % numberstyle=,
+    language=C,
     frame=shadowbox,
     tabsize=4,
     columns=fixed,
     showstringspaces=true,
+    stringstyle=\ttfamily,
     showtabs=false,
     showspaces=false,
     keepspaces,
     breaklines=true,
-    commentstyle=\color{red},
-    keywordstyle=\color{blue},
+    basicstyle=\color{black},
+    commentstyle=\itshape\color{DarkOrchid},
+    keywordstyle=\color{BlueViolet},
+    identifierstyle=\color{Black},
+    stringstyle=\color{PineGreen},
     title=\lstname,
+    morekeywords={NULL, KERN_DEBUG, KERN_CRIT, void, u8, u16,
+      int, return, printk, =, !=, ==},
+    float
 }
 
 \usepackage[babel=true]{csquotes}

@@ -12,7 +12,7 @@ Der Sensor benötigt \gls{vcc} und \gls{gnd} für die Spannungsversorgung, sowie
 Die Pins werden mit dem \gls{rpi} wie in \autoref{tab:i2c} verbunden.
 Der \texttt{Alert} Pin ist unbenutzt und wird daher nicht verbunden.
 Der \texttt{Add0} Pin stellt das \gls{lsb} der \gls{i2c} Addresse ein.
-Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern angeschlossen werden.
+Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern angeschlossen werden, dieser kann \gls{nc} bleiben.
 
 \begin{table}[h]
     \centering
@@ -21,9 +21,9 @@ Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern anges
         \textbf{Funktion} & \textbf{\gls{scl}} & \textbf{\gls{sda}} & \textbf{\gls{vcc}} & \textbf{\gls{gnd}} & \textbf{\texttt{Alert}} & \textbf{\texttt{Add0}}\\
         \hline
         \hline
-        \gls{rpi} Pin Name & GPIO3 & GPIO2 & & & None & None \\
+        \gls{rpi} Pin Name & GPIO3 & GPIO2 & & & \gls{nc} & \gls{nc} \\
         \hline
-        \gls{rpi} Pin Number & Pin5 & Pin3 & Pin2 & Pin14 & None & None \\
+        \gls{rpi} Pin Number & Pin5 & Pin3 & Pin2 & Pin14 & \gls{nc} & \gls{nc} \\
         \hline
     \end{tabular}
     \caption{\gls{i2c} Pinout Tabelle}

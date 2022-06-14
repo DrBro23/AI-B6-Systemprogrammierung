@@ -1,6 +1,6 @@
 \subsection{Kernel Treiber}
 
-\begin{wrapfigure}[22]{o}[1cm]{8cm}
+\begin{wrapfigure}[23]{o}[1cm]{8cm}
 \dirtree{%
 .1 /.
 .2 install\_driver.sh.
@@ -20,6 +20,8 @@
 .4 pwm.h.
 .4 temp.c.
 .4 temp.h.
+.4 ioctl.c.
+.4 ioctl.h.
 }
 \caption{Ordnerstruktur des Treibers}
 \label{fig:driverdirectory}
@@ -36,18 +38,23 @@ Alle anderen Dateien sind notwendig jedoch kein direkter Teil des Treibers.
 
 Die Haupt-Datei mit dem Anfangspunkt des Treibers ist in \texttt{fanctrl.c}.
 Darin wird das Treibermodul initialisiert, registriert, ausgeführt und schließlich auch de-initialisiert.
-Der Kernel-Treiber kann über sowohl \gls{fops} mit dem Userspace kommunizieren.
-Dies wird in den \texttt{fops.c} und dem dazugehörigen Header implementiert. % TODO add IOCTL
+Der Kernel-Treiber kann über sowohl durch \gls{fops} als auch mit \gls{ioctl} mit dem Userspace kommunizieren.
+Dies wird in den \texttt{fops.c} und \texttt{ioctl.c} und deren jehweils dazugehörigen Header-Files implementiert.
 Die anderen zwei Hauptfunktionen, die Kommunikation über \gls{i2c} und \gls{spi} werden in \texttt{temp.c} und \texttt{pwm.c} respektiv implementiert.
 In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche Dateien und der Kompilierungs/Installationsvorgang beschreiben.
 
 \subsubsection{Temperatursensor über \acrshort{i2c}}
 
-\Gls{i2c} Adapter Initialisieren.
-\lstinputlisting[firstnumber=17, firstline=17,lastline=27, title=./driver/src/temp.c]{../../driver/src/temp.c}
+Mit der Funktion \texttt{void tempInit(void)} in \autoref{code:i2c-init} wird der \gls{i2c} Adapter initialisiert.
+Dannach wird ein neuer \gls{i2c} Device hinzugefügt und der Treiber wird dem Adapter registriert.
+Der Device beinhält die Informationen über Device Name und Addresse.
+Ist der Adapter initialisiert wird dieser mit \texttt{void tempDeinit(void)} in \label{code:i2c-deinit} zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
+Dabei werden alle vom \gls{i2c} Adapter genutzen Ressourcen für den Treiber frei gegeben.
+Auf dem \gls{rpi} muss \gls{i2c} durch die \texttt{raspi-config} aktiviert werden.
 
-\Gls{i2c} Adapter De-initialisieren.
-\lstinputlisting[firstnumber=29, firstline=29,lastline=34, title=./driver/src/temp.c]{../../driver/src/temp.c}
+\lstinputlisting[firstnumber=17, firstline=17,lastline=27, language=C, caption={\texttt{./driver/src/temp.c:17-27}}, label=code:i2c-init, float=b]{../../driver/src/temp.c}
+
+\lstinputlisting[firstnumber=29, firstline=29,lastline=34, language=C, caption={\texttt{./driver/src/temp.c:29-34}}, label=code:i2c-deinit, float=b]{../../driver/src/temp.c}
 
 Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflösung von $0.0625\si{\degree C}$ am \gls{lsb} an.
 Um einen Messwert zu einer Temperatur zu konvertieren müssen zuerst zwei Byte gelesen werden.
@@ -59,6 +66,7 @@ Die berechnung wird folglich mit der Integerdivision des Kehrwerts wie in \autor
 Der Fehler der Berechnung wird in \autoref{eq:temp-error} aufgeführt und in \autoref{fig:rounding-err} visualisiert.
 Der resultierende Rundungsfehler manifestiert sich als Rauschen.
 Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen Präzision agiert sind die resultierenden Fehler vernachlässigbar.
+Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist in \autoref{code:i2c-convert} gegeben.
 
 \begin{equation}
     \vartheta = \texttt{M}_D \cdot 0.0625\si{\celsius} = \frac{\texttt{M}_D}{\left(0.0625\si{\celsius}\right)^{-1}} = \frac{\texttt{M}_D}{16\si{\per\celsius}} \approx \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor
@@ -67,10 +75,11 @@ Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen P
 \begin{equation}
     \begin{aligned}
         \Delta_{\texttt{M}_D} &= \frac{\texttt{M}_D}{16\si{\celsius}} - \left\lfloor\frac{\texttt{M}_D}{16\si{\per\celsius}}\right\rfloor \\[2ex]
-        \delta_{\texttt{M}_D} &= \frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16\si{\celsius}} } \\[2ex]
+        \delta_{\texttt{M}_D} &= \frac{\Delta_{\texttt{M}_D}}{\frac{\texttt{M}_D}{16\si{\celsius}} }\\[2ex]
     \end{aligned}
     \label{eq:temp-error}
 \end{equation}
+
 \begin{figure}
     \centering
     \begin{tikzpicture}
@@ -103,13 +112,18 @@ Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen P
     }
     \label{fig:rounding-err}
 \end{figure}
-\lstinputlisting[firstnumber=37, firstline=37,lastline=49, title=./driver/src/temp.c]{../../driver/src/temp.c}
+
+\lstinputlisting[firstnumber=37, firstline=37,lastline=49, caption=\texttt{./driver/src/temp.c:37-49}, label=code:i2c-convert, float]{../../driver/src/temp.c}
 
 \subsubsection{Potentiometer über \acrshort{spi}}
 
 \subsubsubsection{Protokoll}
 
+% TODO Beschreiben welche Bits zu dem Potentiometer über SPI geschickt werden
+
 \subsubsubsection{Softwareablauf}
+
+% TODO Beschreibung von Code Abschnitten über SPI
 
 \subsubsubsection{Devicetree Overlay}
 Auf dem \gls{rpi} muss der \gls{spi} Treiber durch \texttt{raspi-config} aktiviert werden.
@@ -132,15 +146,19 @@ sudo dtoverlay -d . spidev_disabler
 
 \subsubsection{\acrshort{fops}}
 
+% TODO Beschreiben von FOPS Treiber
+
 \subsubsection{\Acrshort{ioctl}}
+
+% TOOD Beschreiben von IOCTL Treiber
 
 \subsubsection{Kompilierung und Verlinkung}
 
 Der Treiber kann automatisch kompiliert und als Kernel Objekt verlinkt werden.
 Danach kann das erstelle Kernel Objekt auch geladen werden.
 \begin{lstlisting}
-    make all
-    sudo insmod fanctrl.ko
+make all
+sudo insmod fanctrl.ko
 \end{lstlisting}
 
 Um den Entwicklungslebenszyklus zu vereinfachen besteht auch die Möglichkeit den gesamten Zyklus automatisch auszuführen.
