@@ -1,5 +1,5 @@
 // ----------------------------------------
-// 
+//
 // ----------------------------------------
 
 #include "temp.h"
@@ -17,7 +17,7 @@ static struct i2c_driver test_driver = {
 static struct i2c_board_info test_i2c_board_info = {
     I2C_BOARD_INFO(SLAVE_DEVICE_NAME, SLAVE_ADDRESS)};
 
-// Initial function for I2C Adapter 
+// --- i2c init start ---
 void tempInit(void) {
     test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
 	if(test_i2c_adapter == NULL)	{
@@ -29,15 +29,18 @@ void tempInit(void) {
     	i2c_put_adapter(test_i2c_adapter);
 	}
 }
+// --- i2c init end ---
 
+// --- i2c deinit start ---
 void tempDeinit(void)   {
 	if(test_i2c_client != NULL)	{
     	i2c_unregister_device(test_i2c_client);
     	i2c_del_driver(&test_driver);
 	}
 }
+// --- i2c deinit end ---
 
-// Read temperatur value from the temperature sensor
+// --- i2c read start ---
 u16 readTemp(void) {
 	int temp;
 	u8 b1, b2;
@@ -51,3 +54,4 @@ u16 readTemp(void) {
 
 	return temp;
 }
+// --- i2c read end ---

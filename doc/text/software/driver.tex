@@ -45,16 +45,13 @@ In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche
 
 \subsubsection{Temperatursensor über \acrshort{i2c}}
 
-Mit der Funktion \texttt{void tempInit(void)} in \autoref{code:i2c-init} wird der \gls{i2c} Adapter initialisiert.
-Dannach wird ein neuer \gls{i2c} Device hinzugefügt und der Treiber wird dem Adapter registriert.
+Der Temperatursensor ist in \texttt{./src/temp.c} und \texttt{./src/temp.h} implementiert.
+Mit der Funktion \texttt{tempInit} wird der \gls{i2c} Adapter initialisiert.
+Dannach wird ein neuer \gls{i2c} Device struct hinzugefügt und der Treiber wird dem Adapter registriert.
 Der Device beinhält die Informationen über Device Name und Addresse.
-Ist der Adapter initialisiert wird dieser mit \texttt{void tempDeinit(void)} in \label{code:i2c-deinit} zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
+Ist der Adapter initialisiert wird dieser mit \texttt{tempDeinit}zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
 Dabei werden alle vom \gls{i2c} Adapter genutzen Ressourcen für den Treiber frei gegeben.
 Auf dem \gls{rpi} muss \gls{i2c} durch die \texttt{raspi-config} aktiviert werden.
-
-\lstinputlisting[firstnumber=21, firstline=21,lastline=31,caption={\texttt{./driver/src/temp.c:21-31}}, label=code:i2c-init, float=b]{../../driver/src/temp.c}
-
-\lstinputlisting[firstnumber=33, firstline=33,lastline=38,caption={\texttt{./driver/src/temp.c:33-38}}, label=code:i2c-deinit, float=b]{../../driver/src/temp.c}
 
 Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflösung von $0.0625\si{\degree C}$ am \gls{lsb} an.
 Um einen Messwert zu einer Temperatur zu konvertieren müssen zuerst zwei Byte gelesen werden.
@@ -80,7 +77,9 @@ Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist i
     \label{eq:temp-error}
 \end{equation}
 
-\begin{figure}
+\lstinputlisting[linerange=i2c\ read\ start-i2c\ read\ end, caption={\texttt{./driver/src/temp.c} \gls{i2c} Daten auslesen}, label=code:i2c-convert, float=h]{../../driver/src/temp.c}
+
+\begin{figure}[h]
     \centering
     \begin{tikzpicture}
         \begin{axis}[%
@@ -106,22 +105,38 @@ Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist i
             \addplot[domain=0:2400, blue] {((x * 0.0625) - round(x / 16)) / (x * 0.0625)};
         \end{axis}
     \end{tikzpicture}
-    \caption[Integerdivisionsinduzierter Rundungsfehler]{Integerdivisionsinduzierter Rundungsfehler der Temperatursensorkonversion
+    \caption[Integerdivisionsinduzierter Rundungsfehler]{Integerdivisionsinduzierter Rundungsfehler der Temperatursensorkonversion aus \autoref{eq:temp-error}.
     \textcolor{red}{Rot: Absoluter Fehler $\Delta_{\texttt{M}_D}$.}
     \textcolor{blue}{Blau: Relativer Fehler $\delta_{\texttt{M}_D}$.}
     }
     \label{fig:rounding-err}
 \end{figure}
 
-\lstinputlisting[firstnumber=41, firstline=41,lastline=53, caption=\texttt{./driver/src/temp.c:41-53}, label=code:i2c-convert, float]{../../driver/src/temp.c}
-
 \subsubsection{Potentiometer über \acrshort{spi}}
+\subsubsubsection{\acrshort{spi} Implementation}
 
-\subsubsubsection{Softwareablauf}
+Die Initialisierung des \gls{spi} Treibers läuft sehr ähnlich zu der des \gls{i2c} Treibers ab.
+Die genaue Implementation ist in \texttt{./src/pwm.c} und \texttt{./src/pwm.h} zu finden.
+Es wird zuerst ein \texttt{spi\_board\_info} struct angelegt, welches mit den relevanten Daten des \gls{sbc} gefüllt wird.
+Dannach wird mit der Funktion \texttt{spi\_busnum\_to\_master} ein geeignerter Bus Master gesucht.
+Diser Master implementiert die Schnittstelle zwischen dem Kernel und der Hardware.
+Folgend wird mit \texttt{spi\_new\_device} und schließlich \texttt{spi\_setup} ein \gls{spi} Device angelegt und registriet.
+Zu jedem Schritt können Fehler auftreten, welche abgefangen werden.
+Die Deinitialisierung ist wieder ähnlich.
+Ist der \gls{spi} Device erfolgreich geladen, so wird dieser einfach mit \texttt{spi\_unregister\_device} unregistriert.
 
-% TODO Beschreiben welche Bits zu dem Potentiometer über SPI geschickt werden
+Um den Wiederstand des Potentiometers zu setzen, wird die in \autoref{code:spi-write} gezeigte Funktion genutzt.
+Darin wird eine \gls{spi} Transaktion aus zwei Bytes erstellt.
+Der \texttt{MCP} Chip erwartet zuerst das \textit{Command Byte} in Form von \autoref{tab:command-bits}.
+Im Code ist dieses als \texttt{0b00010011} festgelegt.
+Dadurch werden beide internen Potentiometer das dannach folgdene Byte annehmen.
+Da der Duty Cycle propotional und relativ zu dem Wiederstand ist, kann hier der Wert für das Wiederstandsregister auch als Prozentbereich wie in \autoref{eq:interpret} interpretiert werden.
+\begin{equation}
+    \left[0_{\text{H}}; FF_{\text{H}}\right] \rightarrow \left[0\%; 100\%\right]
+    \label{eq:interpret}
+\end{equation}
 
-% TODO Beschreibung von Code Abschnitten über SPI
+\lstinputlisting[linerange=spi\ write\ start-spi\ write\ end, caption={\texttt{./driver/src/pwm.c} \gls{spi} Potentiometer setzen}, label=code:spi-write, float=h]{../../driver/src/pwm.c}
 
 \subsubsubsection{Devicetree Overlay}
 Auf dem \gls{rpi} muss der \gls{spi} Treiber durch \texttt{raspi-config} aktiviert werden.
@@ -130,13 +145,13 @@ Die angelegten Treiber stellen eine \gls{api}-Verbindung zwischen Kernelspace un
 Jedoch werden durch die Treiber die \gls{ss} Signale belegt.
 Der Treiber zur Kommunikation über \gls{spi} funktioniert, kann jedoch aufgrund dessen nicht durch externe Programme im Kernelspace beansprucht werden.
 Um dies zu umgehen muss der Zugriff auf die \gls{ss} Signale durch die durch das System bereitgestellten Treiber unterbunden werden.
-
 Dazu wird der Devicetree zur Laufzeit mit einem Patch injeziert.
 Deswegen stehen die \gls{ss} Signale frei zur Verfügung, um durch unseren Treiber aus dem Kernelspace genutzt zu werden.
 Das Devicetree Overlay wird mit dem devicetree compiler kompiliert:
 \begin{lstlisting}
 dtc spidev_disabler.dts -O dtb < spidev_disabler.dtbo
 \end{lstlisting}
+\noindent
 Das generierte Overlay wird dannach injeziert:
 \begin{lstlisting}
 sudo dtoverlay -d . spidev_disabler

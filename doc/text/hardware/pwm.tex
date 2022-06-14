@@ -176,6 +176,8 @@ Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \text
 Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
 Folglich ist eine berechnung von $f$ nicht möglich\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
 Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
+Der Duty-Cycle des \gls{pwm} Signals kann nicht analytisch bestimmt werden, jedoch ist dieser proportional zu den Wiederständen ($R_{\text{WA}} \propto D, R - R_{\text{WB}} \propto D$).
+Diese Annahme wird auch in dem Treiber genutzt.
 
 \begin{figure}[p]
     \centering

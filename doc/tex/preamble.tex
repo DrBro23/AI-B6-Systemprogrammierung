@@ -135,9 +135,11 @@
 % CODE
 \usepackage{dirtree}
 \usepackage{listings}
-\renewcommand\lstlistingname{Sourcode} % Change language of section name
+\renewcommand\lstlistingname{Sourcecode} % Change language of section name
 \lstset{ % General setup for the package
     language=C++,
+    rangeprefix=//\ ---\ ,rangesuffix=\ ---,
+    includerangemarker=false,
     numberstyle=\FiraCode\color{black},
     basicstyle=\FiraCode\color{black},
     backgroundcolor=\color{White},
