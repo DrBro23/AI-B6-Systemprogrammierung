@@ -1,0 +1,9 @@
+\subsection{\acrshort{pcb}}
+
+Zu dieser Schaltung wurde auch ein \gls{pcb} entworfen.
+Das \gls{pcb} ist under \autoref{apx:pcb} in \autoref{fig:pcb-2d} und \autoref{fig:pcb-3d} dargestellt.
+Auf dem Board ist ein \texttt{555} Timer zur \gls{pwm} Erzeugung und zwei \texttt{TMP102} Sensoren verbaut.
+Die beiden Sensoren belegen denselben \gls{i2c} Bus.
+Deren Addressen werden jedoch durch die Addresspins gesetzt.
+Momentan besteht keine Softwareunterstützung für zwei Sensoren, jedoch ist diese Modifikation trivial.
+Das \gls{pcb} ist \gls{rpi} \textit{HAT} konform und respektiert mechanische und elektronische Anforderungen.

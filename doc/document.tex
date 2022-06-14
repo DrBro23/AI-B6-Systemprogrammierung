@@ -54,8 +54,8 @@
 \listoffigures
 \thispagestyle{fancy}
 % \thispagestyle{empty}
+\newpage
 \thispagestyle{fancy}
-% \newpage
 % ACRONYMS
 \setglossarystyle{listdotted}
 \setglossarystyle{tree}
@@ -100,9 +100,48 @@
 % \input{./tex/eidesstatt}
 % \thispagestyle{fancy}
 
-% \clearpage
-% \begin{appendices}
-% \end{appendices}
+\clearpage
+\begin{appendices}
+
+    \section{\acrshort{pcb}}\label{apx:pcb}
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{1.0\textwidth}
+            \centering
+            \includegraphics[width=15cm]{./pic/pcb-2d-top.png}
+            \caption{TOP-Seite des \gls{pcb}}
+        \end{subfigure}
+        \begin{subfigure}{1.0\textwidth}
+            \centering
+            \includegraphics[width=15cm]{./pic/pcb-2d-bottom.png}
+            \caption{BOTTOM-Seite des \gls{pcb}}
+        \end{subfigure}
+        \caption{2D Ansicht des \gls{pcb} aus \textit{KiCad}.}
+        \label{fig:pcb-2d}
+    \end{figure}
+    \newpage
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{1.0\textwidth}
+            \centering
+            \includegraphics[width=15cm]{./pic/pcb-3d-top.png}
+            \caption{TOP-Seite des \gls{pcb}}
+        \end{subfigure}
+        \begin{subfigure}{1.0\textwidth}
+            \centering
+            \includegraphics[width=15cm]{./pic/pcb-3d-bottom.png}
+            \caption{BOTTOM-Seite des \gls{pcb}}
+        \end{subfigure}
+        \caption{3D Ansicht des \gls{pcb} aus \textit{KiCad}.}
+        \label{fig:pcb-3d}
+    \end{figure}
+    \newpage
+
+    \includepdf[pages=-,scale=1.0,landscape=true,pagecommand={}]{./pic/ai-b6-fanctrl-schematic.pdf}
+
+\end{appendices}
 \input{./tex/colophon}
 
 \end{document}
