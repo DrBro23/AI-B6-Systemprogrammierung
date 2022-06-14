@@ -52,9 +52,9 @@ Ist der Adapter initialisiert wird dieser mit \texttt{void tempDeinit(void)} in 
 Dabei werden alle vom \gls{i2c} Adapter genutzen Ressourcen für den Treiber frei gegeben.
 Auf dem \gls{rpi} muss \gls{i2c} durch die \texttt{raspi-config} aktiviert werden.
 
-\lstinputlisting[firstnumber=17, firstline=17,lastline=27, language=C, caption={\texttt{./driver/src/temp.c:17-27}}, label=code:i2c-init, float=b]{../../driver/src/temp.c}
+\lstinputlisting[firstnumber=21, firstline=21,lastline=31,caption={\texttt{./driver/src/temp.c:21-31}}, label=code:i2c-init, float=b]{../../driver/src/temp.c}
 
-\lstinputlisting[firstnumber=29, firstline=29,lastline=34, language=C, caption={\texttt{./driver/src/temp.c:29-34}}, label=code:i2c-deinit, float=b]{../../driver/src/temp.c}
+\lstinputlisting[firstnumber=33, firstline=33,lastline=38,caption={\texttt{./driver/src/temp.c:33-38}}, label=code:i2c-deinit, float=b]{../../driver/src/temp.c}
 
 Der \texttt{TMP102} Sensor gibt Messdaten mit 13-Bit Präzision bei einer Auflösung von $0.0625\si{\degree C}$ am \gls{lsb} an.
 Um einen Messwert zu einer Temperatur zu konvertieren müssen zuerst zwei Byte gelesen werden.
@@ -113,7 +113,7 @@ Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist i
     \label{fig:rounding-err}
 \end{figure}
 
-\lstinputlisting[firstnumber=37, firstline=37,lastline=49, caption=\texttt{./driver/src/temp.c:37-49}, label=code:i2c-convert, float]{../../driver/src/temp.c}
+\lstinputlisting[firstnumber=41, firstline=41,lastline=53, caption=\texttt{./driver/src/temp.c:41-53}, label=code:i2c-convert, float]{../../driver/src/temp.c}
 
 \subsubsection{Potentiometer über \acrshort{spi}}
 

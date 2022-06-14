@@ -9,6 +9,7 @@
 \usepackage{textcomp}
 \newfontfamily\Verdana{Verdana}[Scale=MatchLowercase, Ligatures=TeX]
 \newfontfamily\Helvetica{Helvetica Neue}[Scale=MatchLowercase, Ligatures=TeX]
+\newfontfamily\FiraCode{Fira Code Retina}[Scale=MatchLowercase, Ligatures=TeX]
 \setsansfont{Helvetica Neue}
 
 \usepackage[iso,german]{isodate}
@@ -134,29 +135,40 @@
 % CODE
 \usepackage{dirtree}
 \usepackage{listings}
-\renewcommand\lstlistingname{Quelltext} % Change language of section name
+\renewcommand\lstlistingname{Sourcode} % Change language of section name
 \lstset{ % General setup for the package
-    basicstyle=,
+    language=C++,
+    numberstyle=\FiraCode\color{black},
+    basicstyle=\FiraCode\color{black},
+    backgroundcolor=\color{White},
+    keywordstyle=\color{Orchid}\bfseries,
+    rulesepcolor=\color{DarkGray},
+    rulecolor=\color{Black},
+    stringstyle=\color{Emerald}\rmfamily,
+    commentstyle=\color{LightSlateGrey},
+    directivestyle={\color{RoyalPurple}},
+    %
+    emph={u8,u16,int,char,double,float,unsigned,NULL,==,!=,=,KERN_CRIT,KERN_DEBUG,KERN_INFO},
+    emphstyle={\color{BlueViolet}},
+    %
+    otherkeywords = {;,<<,>>,++,|},
+    keywordstyle=\color{WildStrawberry},
+    morekeywords = [2]{b1,b2,temp,test_i2c_client,test_driver,test_i2c_adapter,test_i2c_board_info},
+    keywordstyle = [2]{\color{WildStrawberry}},
+    morekeywords = [3]{I2C_BUS_AVAILABLE,0x00},
+    keywordstyle = [3]{\color{Crimson}},
+    %
     numbers=left,
-    % numberstyle=,
-    language=C,
     frame=shadowbox,
     tabsize=4,
     columns=fixed,
     showstringspaces=true,
-    stringstyle=\ttfamily,
     showtabs=false,
     showspaces=false,
     keepspaces,
     breaklines=true,
-    basicstyle=\color{black},
-    commentstyle=\itshape\color{DarkOrchid},
-    keywordstyle=\color{BlueViolet},
-    identifierstyle=\color{Black},
-    stringstyle=\color{PineGreen},
+    captionpos=b,
     title=\lstname,
-    morekeywords={NULL, KERN_DEBUG, KERN_CRIT, void, u8, u16,
-      int, return, printk, =, !=, ==},
     float
 }
 
