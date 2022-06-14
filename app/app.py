@@ -13,10 +13,7 @@ curve_points = list()
 MIN_SPEED = 255
 MAX_SPEED = 0
 
-# #define CMD_READ_TEMP _IOR('a', 'a', int32_t*)
-CMD_READ_TEMP = IOR(ord('A'), 0x01, ctypes.c_uint32)
-
-# #define CMD_SET_SPEED _IOW('a', 'b', int32_t*)
+# #define CMD_SET_SPEED _IOW('A', 0x02, int32_t*)
 CMD_SET_SPEED =IOW(ord('A'), 0x02, ctypes.c_uint32)
 
 def set_speed(speed):
@@ -26,6 +23,9 @@ def set_speed(speed):
     if(rt != buf):
         print("Error Setting Speed")
     fd.close()
+
+# #define CMD_READ_TEMP _IOR('A', 0x01, int32_t*)
+CMD_READ_TEMP = IOR(ord('A'), 0x01, ctypes.c_uint32)
 
 def read_temp():
     buf = bytes(4)

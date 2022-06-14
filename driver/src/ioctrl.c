@@ -6,7 +6,7 @@
 
 long dev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
-    uint32_t value = 0;
+    u32 value = 0;
 
     switch (cmd)
     {
@@ -14,7 +14,8 @@ long dev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
     {
         value = readTemp();
 
-        if (copy_to_user((uint32_t *)arg, &value, sizeof(value)))    {
+        if (copy_to_user((u32 *)arg, &value, sizeof(value)))
+        {
             pr_err(KERN_INFO "Read: Error!\n");
         }
         printk(KERN_INFO "IOCTRL temp value: %d (%d)\n", value, cmd);
@@ -23,7 +24,8 @@ long dev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
     }
     case CMD_SET_SPEED:
     {
-        if( copy_from_user(&value ,(uint32_t*) arg, sizeof(value)) ) {
+        if (copy_from_user(&value, (u32 *)arg, sizeof(value)))
+        {
             pr_err(KERN_INFO "Write: Error!\n");
         }
         pwmSetDuty(value);

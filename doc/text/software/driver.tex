@@ -148,31 +148,51 @@ Um dies zu umgehen muss der Zugriff auf die \gls{ss} Signale durch die durch das
 Dazu wird der Devicetree zur Laufzeit mit einem Patch injeziert.
 Deswegen stehen die \gls{ss} Signale frei zur Verfügung, um durch unseren Treiber aus dem Kernelspace genutzt zu werden.
 Das Devicetree Overlay wird mit dem devicetree compiler kompiliert:
-\begin{lstlisting}
-dtc spidev_disabler.dts -O dtb < spidev_disabler.dtbo
+\begin{lstlisting}[language=bash, numbers=none]
+dtc spidev_disabler.dts -O dtb > spidev_disabler.dtbo
 \end{lstlisting}
 \noindent
 Das generierte Overlay wird dannach injeziert:
-\begin{lstlisting}
+\begin{lstlisting}[language=bash, numbers=none]
 sudo dtoverlay -d . spidev_disabler
 \end{lstlisting}
 
 \subsubsection{\acrshort{fops}}
 
-% TODO Beschreiben von FOPS Treiber
+Die \gls{fops} Operationen werden in \texttt{./src/fops.c} und \texttt{./src/fops.h} implementiert und in \texttt{./src/fanctrl.c} im \texttt{file\_operations} struct registriert.
+Der \gls{fops} Treiber legt eine Pseudodatei unter \texttt{/etc/fanctrl} an.
+Durch lesen der Datei wird der Sensor kontinuierlich ausgelsen und der Temperaturwert ausgegeben.
+Durch schreiben in die Datei wird der Duty Cycle gesetzt.
+Dieser muss im Intervall zwischen $\left[0_{\text{H}}; FF_{\text{H}}\right]$ liegen.
 
 \subsubsection{\Acrshort{ioctl}}
 
-% TOOD Beschreiben von IOCTL Treiber
+Die \gls{ioctl} Treiber werden in \texttt{./src/ioctl.c} und \texttt{./src/ioctl.h} implementiert und auch in \texttt{./src/fanctrl.c} im \texttt{file\_operations} struct registriert.
+Der Header definiert zwei \gls{ioctl} Kommandos.
+Diese sind in \autoref{tab:ioctl} aufgeführt.
+Die Implementation findet in der dazugehörigen C-Datei in \texttt{dev\_ioctl} statt.
+Durch \texttt{CMD\_READ\_TEMP} wird die Temperatur gelesen und zurückgegeben.
+Mit \texttt{CMD\_SET\_SPEED} wird der duty cycle zu dem Übergabeparameter gesetzt.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|l|l|l|}
+        \hline
+        \textbf{IOCTL Name} & \textbf{Richtung} & \textbf{Typ} & \textbf{Nr} & \textbf{Größe} \\
+        \hline
+        \hline
+        \texttt{CMD\_READ\_TEMP} & Read & '\texttt{A}' & $01_{\text{H}}$ & \texttt{u32} \\
+        \hline
+        \texttt{CMD\_SET\_SPEED} & Write & '\texttt{A}' & $02_{\text{H}}$ & \texttt{u32} \\
+        \hline
+    \end{tabular}
+    \caption{Verfügbare \acrshort{ioctl} Kommandos}
+    \label{tab:ioctl}
+\end{table}
 
 \subsubsection{Kompilierung und Verlinkung}
 
-Der Treiber kann automatisch kompiliert und als Kernel Objekt verlinkt werden.
-Danach kann das erstelle Kernel Objekt auch geladen werden.
-\begin{lstlisting}
-make all
-sudo insmod fanctrl.ko
-\end{lstlisting}
-
+Der Treiber kann automatisch mit dem \texttt{Makefile} kompiliert und als Kernel Objekt verlinkt werden.
+Danach kann das erstelle Kernel Objekt auch in den Kernel geladen werden.
 Um den Entwicklungslebenszyklus zu vereinfachen besteht auch die Möglichkeit den gesamten Zyklus automatisch auszuführen.
-Mit dem \texttt{install\_driver.sh} Skript wird das Kernelmodul entladen, neu kompiliert, das Devicetree Overlay neu geladen und das Kernel Modul wieder neu geladen.
+Mit dem \texttt{./install\_driver.sh} Skript wird das Kernelmodul entladen, neu kompiliert, das Devicetree Overlay neu geladen und das Kernel Modul wieder neu geladen.

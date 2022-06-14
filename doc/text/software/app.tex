@@ -18,7 +18,7 @@ Dieser beinhält einzelne Eingabe/Ausgabe Wert Datenpaare aus einer \gls{csv} Da
 Die resultierende Übertragungsfunktion ist eine stückweis lineare Funktion.
 Ein Beispiel dafür ist in \autoref{fig:pcl} mit den Datenpunkten aus \autoref{tab:pcl} dargestellt.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \begin{tikzpicture}
         \draw[step=0.5,gray,thin] (0,0) grid (6.75,2);
@@ -63,8 +63,20 @@ Ein Beispiel dafür ist in \autoref{fig:pcl} mit den Datenpunkten aus \autoref{t
     \label{tab:pcl}
 \end{table}
 
-
 \subsubsection{\acrshort{ipc} über \acrshort{ioctl}}
+
+\textit{Python} unterstützt \gls{ioctl} durch die \texttt{fcntl} Standardbibliothek.
+Jedoch existieren die C-Makros zur Definition der \gls{ioctl} Konstanten nicht.
+Dazu wird die externe \textit{ioctl\_opt}\cite{ioctl} Bibliothek benutzt.
+Diese in Kombination der Standard \textit{ctypes} Bibliothek ermöglicht eine ähnliche Nutzung zu den Nativen C-Makros.
+Die \textit{ioctl\_opt} Bibliothek stellt ähnliche Makros zur Verfügung.
+Die interne Implementation besteht aus logischen Operationen und Shifts.
+Die resultierenden \gls{ioctl} Konstanten können dannach auf eine geöffnete Instanz der angelegten Pseudeodatei in \texttt{/etc/fanctrl} durch \texttt{fcntl.ioctl} mit einem geigneten Buffer angewendet werden.
+Um den Buffer zu schreiben oder zu lesen wird die native \texttt{Bytes} Klasse verwendet.
+Die Bytes benutzen \textit{little Endianness}.
+Eine relevante Funktionen ist in \autoref{code:py-ioctl} aufgeführt.
+
+\lstinputlisting[linerange={27-36}, firstnumber=27, caption={\texttt{./app/app.py} \gls{ioctl} für zum Auslesen der Temperatur}, language=python, label=code:py-ioctl, float=h]{../../app/app.py}
 
 \subsubsection{Installation und Ausführung}
 
@@ -72,11 +84,11 @@ Zur Ausführung wird eine globale Instanz von \textit{Python} Version \texttt{3.
 Es werden externe Abhängigkeiten benötigt.
 Es wird empfohlen diese in ein lokales \texttt{virtual enviornment} zu installieren um den globalen scope nicht zu vermüllen.
 Der empfohlene Prozess zur Ausführung:
-\begin{lstlisting}
+\begin{lstlisting}[language=bash, numbers=none]
 cd app
 python3 -m venv venv
 source ./venv/bin/activate
 pip install -r requirements.txt
-chmod +x ./app.py #optional
+chmod +x ./app.py
 ./app.py
 \end{lstlisting}

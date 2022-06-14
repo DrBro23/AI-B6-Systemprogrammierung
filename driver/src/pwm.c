@@ -62,7 +62,7 @@ void pwmDeinit(void)
 // --- spi write start ---
 void pwmSetDuty(int cycle)
 {
-    uint8_t tx[2];
+    u8 tx[2];
 
     if (spi_device)
     {
