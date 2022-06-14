@@ -1,7 +1,10 @@
+// ----------------------------------------
+// 
+// ----------------------------------------
+
 #include "temp.h"
 
-// Communication with the temperature sensor
-// by I2C
+// Communication with the temperature sensor with I2C
 static struct i2c_adapter *test_i2c_adapter = NULL;
 static struct i2c_client *test_i2c_client = NULL;
 static const struct i2c_device_id test_id[] =
@@ -14,6 +17,7 @@ static struct i2c_driver test_driver = {
 static struct i2c_board_info test_i2c_board_info = {
     I2C_BOARD_INFO(SLAVE_DEVICE_NAME, SLAVE_ADDRESS)};
 
+// Initial function for I2C Adapter 
 void tempInit(void) {
     test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
 	if(test_i2c_adapter == NULL)	{
@@ -33,7 +37,7 @@ void tempDeinit(void)   {
 	}
 }
 
-// read temperatur value from the temperature sensor
+// Read temperatur value from the temperature sensor
 u16 readTemp(void) {
 	int temp;
 	u8 b1, b2;

@@ -1,3 +1,7 @@
+// ----------------------------------------
+// Input/Output Control for temperature read and speed fan set
+// ----------------------------------------
+
 #include "ioctrl.h"
 
 long dev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
@@ -11,19 +15,19 @@ long dev_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
         value = readTemp();
 
         if (copy_to_user((uint32_t *)arg, &value, sizeof(value)))    {
-            pr_err("Read: Error!\n");
+            pr_err(KERN_INFO "Read: Error!\n");
         }
-        printk("ioctrl temp value:%d (%d)\n", value, cmd);
+        printk(KERN_INFO "IOCTRL temp value: %d (%d)\n", value, cmd);
 
         break;
     }
     case CMD_SET_SPEED:
     {
         if( copy_from_user(&value ,(uint32_t*) arg, sizeof(value)) ) {
-            pr_err("Write: Error!\n");
+            pr_err(KERN_INFO "Write: Error!\n");
         }
         pwmSetDuty(value);
-        printk("ioctrl duty value:%d\n", value);
+        printk(KERN_INFO "IOCTRL duty value: %d\n", value);
 
         break;
     }

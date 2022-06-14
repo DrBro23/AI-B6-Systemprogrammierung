@@ -1,13 +1,19 @@
+// ----------------------------------------
+// Input and Output for user
+// ----------------------------------------
+
 #include "fops.h"
 #include "pwm.h"
 #include "temp.h"
 
+// TODO
 int dev_uevent(struct device *dev, struct kobj_uevent_env *env)
 {
 	add_uevent_var(env, "DEVMODE=%#o", 0666);
 	return 0;
 }
 
+// Convert String to Int
 static unsigned int ToUInt(char* str)
 {
     unsigned int mult = 1;
@@ -22,6 +28,7 @@ static unsigned int ToUInt(char* str)
     return re;
 }
 
+// Write function to get input from user
 ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_t *offset)
 {
 	size_t max_len = 30;
@@ -47,6 +54,7 @@ ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_
 	return count;
 }
 
+// Read function to print result at output
 ssize_t dev_read(struct file *file, char *user_buffer, size_t count, loff_t *offs)
 {
 	// TODO

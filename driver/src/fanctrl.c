@@ -1,3 +1,7 @@
+// ----------------------------------------
+// Communication between driver and fan
+// ----------------------------------------
+
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/fs.h>
@@ -15,13 +19,16 @@
 #include "fops.h"
 #include "ioctrl.h"
 
+// Initial functions
 static int __init dev_init(void);
 static void __exit dev_exit(void);
 
+// Driver functions
 dev_t myDeviceNr;
 struct class *myClass;
 struct cdev myDevice;
 
+// File Operations for fan
 struct file_operations fops = {
 	.owner = THIS_MODULE,
 	.read = dev_read,
@@ -55,12 +62,12 @@ int __init dev_init(void)
 
 void __exit dev_exit(void)
 {
-	printk(KERN_INFO "Fanctrl: stopping %s.\n", __FUNCTION__);
+	printk(KERN_INFO "Fanctrl: Stopping %s.\n", __FUNCTION__);
 
 	tempDeinit();
 	pwmDeinit();
 
-	printk(KERN_DEBUG "Fanctrl: stopping FOPS");
+	printk(KERN_DEBUG "Fanctrl: Stopping FOPS");
 
     cdev_del(&myDevice);
     device_destroy(myClass, myDeviceNr);

@@ -1,3 +1,6 @@
+// ----------------------------------------
+// Temperature Sensor Header
+// ----------------------------------------
 #pragma once
 
 #include <linux/module.h>
