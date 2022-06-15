@@ -1,7 +1,7 @@
 \subsection{\Acrshort{pwm}-Erzeugung}
 
-Um die Geschiwindigkeit eines Lüfters zu regulieren, wird dieser mit einem \gls{pwm} Signal gesteuert.
-Die Pulsweite ist proportional zur resultierenden Zielgeschiwindigkeit.
+Um die Geschwindigkeit eines Lüfters zu regulieren, wird dieser mit einem \gls{pwm} Signal gesteuert.
+Die Pulsweite ist proportional zur resultierenden Zielgeschwindigkeit.
 Der \gls{rpi} hat interne Hardware um \gls{pwm} Signale zu generieren.
 Diese sind jedoch nicht trivial aus dem Kernelspace erreichbar.
 
@@ -14,7 +14,7 @@ Folglich ist die Lüftergeschwindigkeit proportional zur Pulsweite und proportio
 
 SPI ist ein synchroner, serieller Datenbus mit der Funktionsweise nach dem Master-Slave-Prinzip.
 Die vier wichtigsten Leitungen sind \gls{sclk}, \gls{mosi}, \gls{miso} und \gls{ss}.
-Die \gls{sclk} gibt einen Takt mit einer möglichen Frequenz bis $\si{\mHz}$ aus, welche zur Synchronisation vom Controller benötigt wird. Dieses Signale wird vom Master ausgegeben.
+Die \gls{sclk} gibt einen Takt mit einer möglichen Frequenz bis $\si{\mHz}$ aus, welche zur Synchronisation vom Controller benötigt wird. Dieses Signal wird vom Master ausgegeben.
 Mit \gls{ss} wird der jeweilige Slave ausgewählt, indem das Signal auf logisch 0 gesetzt wird.
 Daten werden mit der \gls{mosi} Leitung vom Master zum Slave und mit der \gls{miso} Leitung vom Slave zum Master gesendet. \\
 In \autoref{fig:spi-transaction} ist die Funktion von \gls{spi} dargestellt.
@@ -61,7 +61,7 @@ Die in \autoref{fig:spi-mcp-transaction} aufgeführten Bits in der Datenübertra
 Die Bedeutung des Command-Byte wird in \autoref{tab:command-bits} erklärt.
 Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
 Der resultierende Wiederstand zwischen Anschluss A und W kann mit der \autoref{eq:resistance1} berechnet werden.
-Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechenen.
+Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechnen.
 
 \begin{table}[h]
     \centering
@@ -170,11 +170,11 @@ wobei
 \subsubsection{555 Timer}
 
 Der Timer ist in einer astabilen Konfiguration verbunden.
-Der Timer erwartet lediglich eine Positive Spannung über $U+$ zu $U-$ von $3.3\si{\volt}$.
-Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \texttt{DIS}, oder auch and Pin 3, \texttt{OUT}, gegben.
+Der Timer erwartet lediglich eine positive Spannung über $U+$ zu $U-$ von $3.3\si{\volt}$.
+Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \texttt{DIS}, oder auch an Pin 3, \texttt{OUT}, gegben.
 \texttt{DIS} ist Open-Drain womit der High-Pegel zu einer belibigen Spannung eingestellt werden kann.
 Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
-Folglich ist eine berechnung von $f$ nicht möglich\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
+Folglich ist eine Berechnung von $f$ nicht möglich\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
 Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
 Der Duty-Cycle des \gls{pwm} Signals kann nicht analytisch bestimmt werden, jedoch ist dieser proportional zu den Wiederständen ($R_{\text{WA}} \propto D, R - R_{\text{WB}} \propto D$).
 Diese Annahme wird auch in dem Treiber genutzt.

@@ -39,7 +39,7 @@ Alle anderen Dateien sind notwendig jedoch kein direkter Teil des Treibers.
 Die Haupt-Datei mit dem Anfangspunkt des Treibers ist in \texttt{fanctrl.c}.
 Darin wird das Treibermodul initialisiert, registriert, ausgeführt und schließlich auch de-initialisiert.
 Der Kernel-Treiber kann über sowohl durch \gls{fops} als auch mit \gls{ioctl} mit dem Userspace kommunizieren.
-Dies wird in den \texttt{fops.c} und \texttt{ioctl.c} und deren jehweils dazugehörigen Header-Files implementiert.
+Dies wird in den \texttt{fops.c} und \texttt{ioctl.c} und deren jeweils dazugehörigen Header-Files implementiert.
 Die anderen zwei Hauptfunktionen, die Kommunikation über \gls{i2c} und \gls{spi} werden in \texttt{temp.c} und \texttt{pwm.c} respektiv implementiert.
 In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche Dateien und der Kompilierungs/Installationsvorgang beschreiben.
 
@@ -48,8 +48,8 @@ In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche
 Der Temperatursensor ist in \texttt{./src/temp.c} und \texttt{./src/temp.h} implementiert.
 Mit der Funktion \texttt{tempInit} wird der \gls{i2c} Adapter initialisiert.
 Dannach wird ein neuer \gls{i2c} Device struct hinzugefügt und der Treiber wird dem Adapter registriert.
-Der Device beinhält die Informationen über Device Name und Addresse.
-Ist der Adapter initialisiert wird dieser mit \texttt{tempDeinit}zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
+Der Device beinhaltet die Informationen über Device Name und Adresse.
+Ist der Adapter initialisiert wird dieser mit \texttt{tempDeinit} zum Programmende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
 Dabei werden alle vom \gls{i2c} Adapter genutzen Ressourcen für den Treiber frei gegeben.
 Auf dem \gls{rpi} muss \gls{i2c} durch die \texttt{raspi-config} aktiviert werden.
 
@@ -59,10 +59,10 @@ Diese müssen zu einem 16-Bit Wert, welcher den ogrinellen 13-Bit Messwert beinh
 Anschlie{\ss}end muss der Messwert linear abgebildet werden, dass hei{\ss}t mit der Auflösung pro \gls{lsb} multiplizieren.
 Die \gls{fpu} sollte unter allen Umständen nicht aus dem Kernelspace verwendet werden,
 da die Kontextänderung abträgliche Performanceimplikationen auf Userspace Applikationen mit sich führen kann.
-Die berechnung wird folglich mit der Integerdivision des Kehrwerts wie in \autoref{eq:temp-convert} ausgeführt.
+Die Berechnung wird folglich mit der Integerdivision des Kehrwerts wie in \autoref{eq:temp-convert} ausgeführt.
 Der Fehler der Berechnung wird in \autoref{eq:temp-error} aufgeführt und in \autoref{fig:rounding-err} visualisiert.
 Der resultierende Rundungsfehler manifestiert sich als Rauschen.
-Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen Präzision agiert sind die resultierenden Fehler vernachlässigbar.
+Da unsere Anwendung sich nominal bei und über Raumtemperatur in Einer-Stellen Präzision agiert, sind die resultierenden Fehler vernachlässigbar.
 Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist in \autoref{code:i2c-convert} gegeben.
 
 \begin{equation}
@@ -120,12 +120,12 @@ Die genaue Implementation ist in \texttt{./src/pwm.c} und \texttt{./src/pwm.h} z
 Es wird zuerst ein \texttt{spi\_board\_info} struct angelegt, welches mit den relevanten Daten des \gls{sbc} gefüllt wird.
 Dannach wird mit der Funktion \texttt{spi\_busnum\_to\_master} ein geeignerter Bus Master gesucht.
 Diser Master implementiert die Schnittstelle zwischen dem Kernel und der Hardware.
-Folgend wird mit \texttt{spi\_new\_device} und schließlich \texttt{spi\_setup} ein \gls{spi} Device angelegt und registriet.
+Folgend wird mit \texttt{spi\_new\_device} und schließlich \texttt{spi\_setup} ein \gls{spi} Device angelegt und registriert.
 Zu jedem Schritt können Fehler auftreten, welche abgefangen werden.
 Die Deinitialisierung ist wieder ähnlich.
-Ist der \gls{spi} Device erfolgreich geladen, so wird dieser einfach mit \texttt{spi\_unregister\_device} unregistriert.
+Ist das \gls{spi} Device erfolgreich geladen, so wird dieser einfach mit \texttt{spi\_unregister\_device} unregistriert.
 
-Um den Wiederstand des Potentiometers zu setzen, wird die in \autoref{code:spi-write} gezeigte Funktion genutzt.
+Um den Widerstand des Potentiometers zu setzen, wird die in \autoref{code:spi-write} gezeigte Funktion genutzt.
 Darin wird eine \gls{spi} Transaktion aus zwei Bytes erstellt.
 Der \texttt{MCP} Chip erwartet zuerst das \textit{Command Byte} in Form von \autoref{tab:command-bits}.
 Im Code ist dieses als \texttt{0b00010011} festgelegt.
@@ -144,7 +144,7 @@ Dadurch werden unter \texttt{/dev} zwei \gls{spi} Treiber angelegt und das Hardw
 Die angelegten Treiber stellen eine \gls{api}-Verbindung zwischen Kernelspace und der Hardware dar.
 Jedoch werden durch die Treiber die \gls{ss} Signale belegt.
 Der Treiber zur Kommunikation über \gls{spi} funktioniert, kann jedoch aufgrund dessen nicht durch externe Programme im Kernelspace beansprucht werden.
-Um dies zu umgehen muss der Zugriff auf die \gls{ss} Signale durch die durch das System bereitgestellten Treiber unterbunden werden.
+Um dies zu umgehen muss der Zugriff auf die \gls{ss} Signale durch die durch das System bereit gestellten Treiber unterbunden werden.
 Dazu wird der Devicetree zur Laufzeit mit einem Patch injeziert.
 Deswegen stehen die \gls{ss} Signale frei zur Verfügung, um durch unseren Treiber aus dem Kernelspace genutzt zu werden.
 Das Devicetree Overlay wird mit dem devicetree compiler kompiliert:
@@ -161,7 +161,7 @@ sudo dtoverlay -d . spidev_disabler
 
 Die \gls{fops} Operationen werden in \texttt{./src/fops.c} und \texttt{./src/fops.h} implementiert und in \texttt{./src/fanctrl.c} im \texttt{file\_operations} struct registriert.
 Der \gls{fops} Treiber legt eine Pseudodatei unter \texttt{/etc/fanctrl} an.
-Durch lesen der Datei wird der Sensor kontinuierlich ausgelsen und der Temperaturwert ausgegeben.
+Durch lesen der Datei wird der Sensor kontinuierlich ausgelesen und der Temperaturwert ausgegeben.
 Durch schreiben in die Datei wird der Duty Cycle gesetzt.
 Dieser muss im Intervall zwischen $\left[0_{\text{H}}; FF_{\text{H}}\right]$ liegen.
 

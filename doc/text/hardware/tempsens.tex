@@ -34,10 +34,10 @@ Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern anges
 
 Der \gls{i2c} Bus ist ein Halbduplex Bus zur Kommunikation zwischen einem Master und belibig vielen Slaves.
 \gls{i2c} Transaktionen bestehen immer aus 8 Bytes.
-Dannach verschickt der Empfänger ein \texttt{ACK} oder \texttt{NACK} Acknowledgement Bit um zu kennzeichen ob die Transaktion erfolgreich war.
+Dannach verschickt der Empfänger ein \texttt{ACK} oder \texttt{NACK} Acknowledgement Bit um zu kennzeichen, ob die Transaktion erfolgreich war.
 Jede Transaktion wird von dem Busmaster gestartet.
 Dieser schickt zuerst eine 7 Bit Addresse. Das 8. \texttt{R/W} Bit, das \gls{lsb}, gibt an, ob die folgende Operation ein Master Read oder Master Write ist.
-Ein generelles Muster eienr \gls{i2c} Transaktion wird in \autoref{fig:i2c-transaction} angezeigt.
+Ein generelles Muster einer \gls{i2c} Transaktion wird in \autoref{fig:i2c-transaction} angezeigt.
 Die $7$-Bit \gls{i2c} Addresse des \texttt{TMP102} verhält sich wie in \autoref{tab:address} angegeben.
 
 Der \texttt{TMP102} Sensor liefert Messdaten mit 13 Bit Auflösung.

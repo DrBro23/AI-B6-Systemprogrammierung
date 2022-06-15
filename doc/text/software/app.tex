@@ -13,8 +13,8 @@ Das Programm ließt periodisch einen Temperatur-Messwert $\texttt{M}_C[n]$ in \s
 
 Grundsätzlich kann die Übertragungsfunktion $f$ beliebig implementiert werden.
 Diese kann sogar von historischen Messdaten $\texttt{M}_C[n-m]$ abhängig sein.
-Unsere implementation realisiert zur Demonstration einen einfachen, kontextfreien, \gls{lut}.
-Dieser beinhält einzelne Eingabe/Ausgabe Wert Datenpaare aus einer \gls{csv} Datei und bestimmt den momentanen Ausgang anhand von linearer Interpolation am Eingangswert.
+Unsere Implementation realisiert zur Demonstration einen einfachen, kontextfreien, \gls{lut}.
+Dieser beinhaltet einzelne Eingabe/Ausgabe Wert-Datenpaare aus einer \gls{csv} Datei und bestimmt den momentanen Ausgang anhand von linearer Interpolation am Eingangswert.
 Die resultierende Übertragungsfunktion ist eine stückweis lineare Funktion.
 Ein Beispiel dafür ist in \autoref{fig:pcl} mit den Datenpunkten aus \autoref{tab:pcl} dargestellt.
 
