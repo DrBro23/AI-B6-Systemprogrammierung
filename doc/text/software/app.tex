@@ -6,13 +6,16 @@ Die Applikation ist ein eigenständiges Programm.
 Dieses kommuniziert mit dem Treiber über \gls{ioctl}.
 Das Programm ist in \textit{Python 3} implementiert.
 Das Programm ließt periodisch einen Temperatur-Messwert $\texttt{M}_C[n]$ in \si{\celsius} aus und bildet diesen zu einem \gls{pwm}-Duty Cycle $\texttt{D}[n]$ nach dem Prinzip von \autoref{eq:app} um.
+Da der Treiber die Abtastrate weder vorgibt, noch künstlich limitiert, kann die Frequenz des Samplings durch die Applikation frei gewählt werden. Der Parameter $n$ steht hier für die Nummer eines Samples.
 \begin{equation}
-    f \left( \texttt{M}_C \left[n\right] \right) \rightarrow \texttt{D}\left[n\right]
+    g \left( \texttt{M}_C \left[n\right] \right) \rightarrow \texttt{D}\left[n\right]
     \label{eq:app}
 \end{equation}
 
-Grundsätzlich kann die Übertragungsfunktion $f$ beliebig implementiert werden.
+Grundsätzlich kann die Übertragungsfunktion $g$ beliebig implementiert werden.
 Diese kann sogar von historischen Messdaten $\texttt{M}_C[n-m]$ abhängig sein.
+Dabei ist der Parameter $m$ ein belibiger Offset in die Vergangenheit.
+Damit bleibt sowohl die Einfachheit der Nutzung, als auch die Flexibilität komplexe Signalverarbeitung zu betreiben, bestehen.
 Unsere Implementation realisiert zur Demonstration einen einfachen, kontextfreien, \gls{lut}.
 Dieser beinhaltet einzelne Eingabe/Ausgabe Wert-Datenpaare aus einer \gls{csv} Datei und bestimmt den momentanen Ausgang anhand von linearer Interpolation am Eingangswert.
 Die resultierende Übertragungsfunktion ist eine stückweis lineare Funktion.
@@ -21,7 +24,7 @@ Ein Beispiel dafür ist in \autoref{fig:pcl} mit den Datenpunkten aus Tabelle \r
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b][][t]{10cm}
+    \begin{subfigure}[b][][t]{9cm}
         \centering
         \begin{tikzpicture}
             \draw[step=0.5,gray,thin] (0,0) grid (6.75,2);
