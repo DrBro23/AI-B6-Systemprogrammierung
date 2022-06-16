@@ -81,30 +81,59 @@ Die Implementation der Kommunikation mit dem Sensor und Wandlung der Daten ist i
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}
-        \begin{axis}[%
-            xmin=0,
-            xmax=2400,
-            ymin=-1.5,
-            ymax=1.5,
-            samples=3000,
-            width=12cm,
-            height=7cm,
-            minor tick num=5,
-            grid=both,
-            grid style={line width=.1pt, draw=gray!10},
-            major grid style={line width=.2pt,draw=gray!50},
-            % nodes near coords,
-            xlabel near ticks,
-            xticklabel style={rotate=45,anchor=north east,inner sep=0mm},
-            xlabel={$\texttt{M}_D$},
-            ylabel={\textcolor{red}{$\Delta_{\texttt{M}_D}$}, \textcolor{blue}{$\delta_{\texttt{M}_D}$} von $\vartheta$},
-            ylabel near ticks]
-            % \addplot[domain=0:6.4, blue, very thick, smooth, ->] {2.1971*1.8206^x};
-            \addplot[domain=0:2400, red] {(x * 0.0625) - round(x / 16)};
-            \addplot[domain=0:2400, blue] {((x * 0.0625) - round(x / 16)) / (x * 0.0625)};
-        \end{axis}
-    \end{tikzpicture}
+    \begin{subfigure}[b][7cm][t]{12cm}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[%
+                xmin=0,
+                xmax=2400,
+                ymin=-1.5,
+                ymax=1.5,
+                samples=3000,
+                width=12cm,
+                height=7cm,
+                minor tick num=5,
+                grid=both,
+                grid style={line width=.1pt, draw=gray!10},
+                major grid style={line width=.2pt,draw=gray!50},
+                % nodes near coords,
+                xlabel near ticks,
+                xticklabel style={rotate=45,anchor=north east,inner sep=0mm},
+                xlabel={$\texttt{M}_D$},
+                ylabel={\textcolor{red}{$\Delta_{\texttt{M}_D}$}, \textcolor{blue}{$\delta_{\texttt{M}_D}$} von $\vartheta$},
+                ylabel near ticks]
+                % \addplot[domain=0:6.4, blue, very thick, smooth, ->] {2.1971*1.8206^x};
+                \addplot[domain=0:2400, red] {(x * 0.0625) - round(x / 16)};
+                \addplot[domain=0:2400, blue] {((x * 0.0625) - round(x / 16)) / (x * 0.0625)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{subfigure}
+    \begin{subfigure}[b][7cm][t]{4cm}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[%
+                xmin=0,
+                xmax=100,
+                ymin=-1.5,
+                ymax=1.5,
+                samples=500,
+                width=5cm,
+                height=7cm,
+                minor tick num=5,
+                grid=both,
+                grid style={line width=.1pt, draw=gray!10},
+                major grid style={line width=.2pt,draw=gray!50},
+                % nodes near coords,
+                xlabel near ticks,
+                xticklabel style={rotate=45,anchor=north east,inner sep=0mm},
+                xlabel={$\texttt{M}_D$},
+                ymajorticks=false]
+                % \addplot[domain=0:6.4, blue, very thick, smooth, ->] {2.1971*1.8206^x};
+                \addplot[domain=0:100, red] {(x * 0.0625) - round(x / 16)};
+                \addplot[domain=0:100, blue] {((x * 0.0625) - round(x / 16)) / (x * 0.0625)};
+            \end{axis}
+        \end{tikzpicture}
+    \end{subfigure}
     \caption[Integerdivisionsinduzierter Rundungsfehler]{Integerdivisionsinduzierter Rundungsfehler der Temperatursensorkonversion aus \autoref{eq:temp-error}.
     \textcolor{red}{Rot: Absoluter Fehler $\Delta_{\texttt{M}_D}$.}
     \textcolor{blue}{Blau: Relativer Fehler $\delta_{\texttt{M}_D}$.}
