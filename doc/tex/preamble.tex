@@ -9,8 +9,11 @@
 \usepackage{textcomp}
 \newfontfamily\Verdana{Verdana}[Scale=MatchLowercase, Ligatures=TeX]
 \newfontfamily\Helvetica{Helvetica Neue}[Scale=MatchLowercase, Ligatures=TeX]
-\newfontfamily\FiraCode{Fira Code Retina}[Scale=MatchLowercase, Ligatures=TeX]
-\setsansfont{Helvetica Neue}
+\newfontfamily\FiraCode{Fira Code}[Scale=MatchLowercase, Ligatures=TeX]
+\newfontfamily\MinionPro{Minion Pro}[Scale=MatchLowercase, Ligatures=TeX]
+\setsansfont[Ligatures=TeX]{Helvetica Neue}
+\setmonofont[Scale=MatchLowercase, Ligatures=TeX, Contextuals={Alternate}]{Fira Code}
+\setmainfont[Ligatures=TeX]{Minion Pro}
 
 \usepackage[iso,german]{isodate}
 \usepackage{hyphenat}
@@ -29,8 +32,12 @@
 \usepackage{ragged2e}
 \usepackage{seqsplit}
 \usepackage{tabto}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\definecolor{hlc}{HTML}{2F4673}
+\newcommand\hlc{\color{hlc}}
+
 \usepackage{float}
-\usepackage[margin=15pt,font=footnotesize,labelfont={bf,sf}]{caption}
+\usepackage[margin=15pt,font=footnotesize,labelfont={color=hlc,bf,sf}]{caption}
 \usepackage{subcaption}
 \usepackage{wrapfig}
 \usepackage{graphicx}
@@ -41,7 +48,6 @@
 \usepackage{textcomp}
 \usepackage{fullpage}
 \usepackage{url}
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 %\usepackage{sectsty}
 \usepackage{pdfpages}
 \usepackage{hologo}
@@ -53,18 +59,14 @@
 % TABLE
 \usepackage{tabularx}
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
-% set up labelformat and labelsep for table
-\captionsetup[table]{labelformat=simple, labelsep=period}
-% set up labelformat and labelsep for subtable
+\captionsetup[table]{labelformat=simple, labelsep=colon}
 \captionsetup[subtable]{labelformat=simple, labelsep=colon}
-
-\definecolor{highlight}{rgb}{0.0, 0.105, 0.3568}
-\newcommand\hlc{\color{highlight}}
 
 % \addtokomafont{section}{\hlc}
 % \addtokomafont{subsection}{\hlc}
 % \addtokomafont{subsubsection}{\hlc}
 % \addtokomafont{paragraph}{\hlc}
+\addtokomafont{disposition}{\hlc\rmfamily}
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
 
 % TOC
