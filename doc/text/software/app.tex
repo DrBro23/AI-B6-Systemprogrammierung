@@ -16,52 +16,58 @@ Diese kann sogar von historischen Messdaten $\texttt{M}_C[n-m]$ abhängig sein.
 Unsere Implementation realisiert zur Demonstration einen einfachen, kontextfreien, \gls{lut}.
 Dieser beinhaltet einzelne Eingabe/Ausgabe Wert-Datenpaare aus einer \gls{csv} Datei und bestimmt den momentanen Ausgang anhand von linearer Interpolation am Eingangswert.
 Die resultierende Übertragungsfunktion ist eine stückweis lineare Funktion.
-Ein Beispiel dafür ist in \autoref{fig:pcl} mit den Datenpunkten aus \autoref{tab:pcl} dargestellt.
+Ein Beispiel dafür ist in \autoref{fig:pcl} mit den Datenpunkten aus Tabelle \ref{tab:pcl} dargestellt.
+% No Autoref, since autoref uses the name of the parent element and thus calls the table a figure
 
-\begin{figure}[b]
+\begin{figure}[h]
     \centering
-    \begin{tikzpicture}
-        \draw[step=0.5,gray,thin] (0,0) grid (6.75,2);
-        \draw[thick, ->] (0,0) -- ++(7,0) node[below right] {$\texttt{M}_C$ in \si{\celsius}};
-        \draw[thick, ->] (0,0) -- (0,3) node[below left] {$\texttt{D}$ in \%};
-        \draw (0,0) node[left]  {$0\%$};
-        \draw (0,1) node[left]  {$50\%$};
-        \draw (0,2) node[left]  {$100\%$};
-        \draw (0,0) node[below] {$0\si{\degree}$};
-        \draw (1,0) node[below] {$10\si{\degree}$};
-        \draw (2,0) node[below] {$20\si{\degree}$};
-        \draw (3,0) node[below] {$30\si{\degree}$};
-        \draw (4,0) node[below] {$40\si{\degree}$};
-        \draw (5,0) node[below] {$50\si{\degree}$};
-        \draw (6,0) node[below] {$60\si{\degree}$};
-        \draw[thick, blue] plot[mark=x, mark size=4pt, only marks] coordinates {(0,0) (2,0.2) (3, 1) (5,2)};
-        \draw[thick, blue, dashed] plot[] coordinates {(0,0) (2,0.2) (3, 1) (5,2) (6.5,2)};
-        \draw[thick, red, ->] (2.4, 0.5) -- (-0.5,0.5) node[left] {\textcolor{red}{$25\%$}};
-        \draw[thick, red, ->] (2.4, -0.5) node[below] {\textcolor{red}{$24\si{\celsius}$}} -- (2.4,0.5);
-    \end{tikzpicture}
-    \caption[Applikations \acrshort{lut} Beispiel]{Applikations \acrshort{lut} Beispiel. Die \textcolor{blue}{blauen Punkte} bilden den \gls{lut}. Die \textcolor{blue}{blaue Linie} zeigt die lineare interpolation. Die \textcolor{red}{rote Intersektion} zeigt einen Beispielswert und dessen dazugehöriges Interpolationsresultat an.}
-    \label{fig:pcl}
+    \begin{subfigure}[b][][t]{10cm}
+        \centering
+        \begin{tikzpicture}
+            \draw[step=0.5,gray,thin] (0,0) grid (6.75,2);
+            \draw[thick, ->] (0,0) -- ++(6.75,0) node[below right] {$\texttt{M}_C$ in \si{\celsius}};
+            \draw[thick, ->] (0,0) -- (0,3) node[below left] {$\texttt{D}$ in \%};
+            \draw (0,0) node[left]  {$0\%$};
+            \draw (0,1) node[left]  {$50\%$};
+            \draw (0,2) node[left]  {$100\%$};
+            \draw (0,0) node[below] {$0\si{\degree}$};
+            \draw (1,0) node[below] {$10\si{\degree}$};
+            \draw (2,0) node[below] {$20\si{\degree}$};
+            \draw (3,0) node[below] {$30\si{\degree}$};
+            \draw (4,0) node[below] {$40\si{\degree}$};
+            \draw (5,0) node[below] {$50\si{\degree}$};
+            \draw (6,0) node[below] {$60\si{\degree}$};
+            \draw[thick, blue] plot[mark=x, mark size=4pt, only marks] coordinates {(0,0) (2,0.2) (3, 1) (5,2)};
+            \draw[thick, blue, dashed] plot[] coordinates {(0,0) (2,0.2) (3, 1) (5,2) (6.5,2)};
+            \draw[thick, red, ->] (2.4, 0.5) -- (-0.5,0.5) node[left] {\textcolor{red}{$25\%$}};
+            \draw[thick, red, ->] (2.4, -0.5) node[below] {\textcolor{red}{$24\si{\celsius}$}} -- (2.4,0.5);
+        \end{tikzpicture}
+        \caption{Applikations \acrshort{lut} Beispiel. Die \textcolor{blue}{blauen Punkte} bilden den \gls{lut}. Die \textcolor{blue}{blaue Linie} zeigt die lineare interpolation. Die \textcolor{red}{rote Intersektion} zeigt einen Beispielswert und dessen dazugehöriges Interpolationsresultat an.}
+        \label{fig:pcl}
+    \end{subfigure}
+    \qquad
+    \begin{subtable}[b][][t]{5cm}
+        \centering
+        \begin{tabular}{|l|l|}
+            \hline
+            \textbf{$\texttt{M}_C$ in $\si{\celsius}$} & \textbf{$\texttt{D}$ in $\%$} \\
+            \hline
+            \hline
+            0 & 0 \\
+            \hline
+            20 & 20 \\
+            \hline
+            30 & 50 \\
+            \hline
+            50 & 100 \\
+            \hline
+        \end{tabular}
+        \vspace{0.75cm}
+        \caption{Beispieldaten für die Übertragungsfunktion aus \autoref{fig:pcl}.}
+        \label{tab:pcl}
+    \end{subtable}
+    \caption[Applikations \acrshort{lut} Beispiel]{Applikations \acrshort{lut} Beispiel.}
 \end{figure}
-
-\begin{table}
-    \centering
-    \begin{tabular}{|l|l|}
-        \hline
-        \textbf{$\texttt{M}_C$ in $\si{\celsius}$} & \textbf{$\texttt{D}$ in $\%$} \\
-        \hline
-        \hline
-        0 & 0 \\
-        \hline
-        20 & 20 \\
-        \hline
-        30 & 50 \\
-        \hline
-        50 & 100 \\
-        \hline
-    \end{tabular}
-    \caption{Beispieltablle für die Übertragungsfunktion aus \autoref{fig:pcl}.}
-    \label{tab:pcl}
-\end{table}
 
 \subsubsection{\acrshort{ipc} über \acrshort{ioctl}}
 
