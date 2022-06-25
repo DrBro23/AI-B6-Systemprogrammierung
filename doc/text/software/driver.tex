@@ -30,7 +30,7 @@
 Der Code des Kernel-Treibers ist in \texttt{C99} geschrieben.
 Dieser ist Prozessoragnostisch.
 Es werden jedoch existierende low-level Treiber zwischen den Prozessorregistern und Kerenlspace erwartet, die die Kommunikation über \gls{i2c} und \gls{spi} abstrahieren.
-Das Modul an sich ist lediglich von linux-Headern abhängig.
+Das Modul an sich ist lediglich von Linux-Headern abhängig.
 Der Treiber ist auf verschiedene \texttt{C}-Dateien aufgeteilt.
 Die Struktur des Treibers ist in \autoref{fig:driverdirectory} aufgeführt.
 Der Tatsächliche Quellcode für den Treiber befindet sich lediglich im \texttt{src} Ordner.
@@ -39,9 +39,9 @@ Alle anderen Dateien sind notwendig jedoch kein direkter Teil des Treibers.
 Die Haupt-Datei mit dem Anfangspunkt des Treibers ist in \texttt{fanctrl.c}.
 Darin wird das Treibermodul initialisiert, registriert, ausgeführt und schließlich auch de-initialisiert.
 Der Kernel-Treiber kann über sowohl durch \gls{fops} als auch mit \gls{ioctl} mit dem Userspace kommunizieren.
-Dies wird in den \texttt{fops.c} und \texttt{ioctl.c} und deren jehweils dazugehörigen Header-Files implementiert.
+Dies wird in den \texttt{fops.c} und \texttt{ioctl.c} und deren jeweils dazugehörigen Header-Files implementiert.
 Die anderen zwei Hauptfunktionen, die Kommunikation über \gls{i2c} und \gls{spi} werden in \texttt{temp.c} und \texttt{pwm.c} respektiv implementiert.
-In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche Dateien und der Kompilierungs/Installationsvorgang beschreiben.
+In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche Dateien und der Kompilierungs/Installationsvorgang beschrieben.
 
 \subsubsection{Temperatursensor über \acrshort{i2c}}
 
@@ -49,7 +49,7 @@ Der Temperatursensor ist in \texttt{./src/temp.c} und \texttt{./src/temp.h} impl
 Mit der Funktion \texttt{tempInit} wird der \gls{i2c} Adapter initialisiert.
 Dannach wird ein neuer \gls{i2c} Device struct hinzugefügt und der Treiber wird dem Adapter registriert.
 Der Device beinhält die Informationen über Device Name und Addresse.
-Ist der Adapter initialisiert wird dieser mit \texttt{tempDeinit}zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
+Ist der Adapter initialisiert wird dieser mit \texttt{tempDeinit} zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
 Dabei werden alle vom \gls{i2c} Adapter genutzen Ressourcen für den Treiber frei gegeben.
 Auf dem \gls{rpi} muss \gls{i2c} durch die \texttt{raspi-config} aktiviert werden.
 
@@ -59,7 +59,7 @@ Diese müssen zu einem 16-Bit Wert, welcher den ogrinellen 13-Bit Messwert beinh
 Anschlie{\ss}end muss der Messwert linear abgebildet werden, dass hei{\ss}t mit der Auflösung pro \gls{lsb} multiplizieren.
 Die \gls{fpu} sollte unter allen Umständen nicht aus dem Kernelspace verwendet werden,
 da die Kontextänderung abträgliche Performanceimplikationen auf Userspace Applikationen mit sich führen kann.
-Die berechnung wird folglich mit der Integerdivision des Kehrwerts wie in \autoref{eq:temp-convert} ausgeführt.
+Die Berechnung wird folglich mit der Integerdivision des Kehrwerts wie in \autoref{eq:temp-convert} ausgeführt.
 Der Fehler der Berechnung wird in \autoref{eq:temp-error} aufgeführt und in \autoref{fig:rounding-err} visualisiert.
 Der resultierende Rundungsfehler manifestiert sich als Rauschen.
 Da unsere Anwednung sich nominal bei und über Raumtemperatur in Einer-Stellen Präzision agiert sind die resultierenden Fehler vernachlässigbar.
@@ -149,9 +149,9 @@ Die genaue Implementation ist in \texttt{./src/pwm.c} und \texttt{./src/pwm.h} z
 Es wird zuerst ein \texttt{spi\_board\_info} struct angelegt, welches mit den relevanten Daten des \gls{sbc} gefüllt wird.
 Dazu zählen die Nummer des Kernel \gls{spi} Treibers, dessen \gls{ss} Signal Nummer und dessen Geschwindigkeit.
 Diese ist hier als $4\si{\mega\hertz}$ festgelegt.
-Dannach wird mit der Funktion \texttt{spi\_busnum\_to\_master} ein geeignerter Bus Master gesucht.
+Dannach wird mit der Funktion \texttt{spi\_busnum\_to\_master} ein geeigneter Bus Master gesucht.
 Diser Master implementiert die Schnittstelle zwischen dem Kernel und der Hardware.
-Folgend wird mit \texttt{spi\_new\_device} und schließlich \texttt{spi\_setup} ein \gls{spi} Device angelegt und registriet.
+Folgend wird mit \texttt{spi\_new\_device} und schließlich \texttt{spi\_setup} ein \gls{spi} Device angelegt und registriert.
 Zu jedem Schritt können Fehler auftreten, welche abgefangen werden.
 Die Deinitialisierung verläuft wieder ähnlich.
 Ist der \gls{spi} Device erfolgreich geladen, so wird dieser einfach mit \texttt{spi\_unregister\_device} unregistriert.
@@ -183,7 +183,7 @@ Das Devicetree Overlay wird mit dem devicetree compiler kompiliert:
 dtc spidev_disabler.dts -O dtb > spidev_disabler.dtbo
 \end{lstlisting}
 \noindent
-Der Kenrnel kann nun mit dem Overlay gepatched werden:
+Der Kernel kann nun mit dem Overlay gepatched werden:
 \begin{lstlisting}[language=bash, numbers=none]
 sudo dtoverlay -d . spidev_disabler
 \end{lstlisting}
@@ -193,7 +193,7 @@ sudo dtoverlay -d . spidev_disabler
 Die \gls{fops} Operationen werden in \texttt{./src/fops.c} und \texttt{./src/fops.h} implementiert.
 Die Funktionen werden in \texttt{./src/fanctrl.c} im \texttt{file\_operations} struct registriert.
 Der \gls{fops} Treiber legt eine Pseudodatei unter \texttt{/etc/fanctrl} an.
-Durch lesen der Datei wird der Sensor kontinuierlich ausgelsen und der Temperaturwert wird in Dezimalformat mit folgendem \enquote{\si{\celsius}} Suffix ausgegeben.
+Durch lesen der Datei wird der Sensor kontinuierlich ausgelesen und der Temperaturwert wird in Dezimalformat mit folgendem \enquote{\si{\celsius}} Suffix ausgegeben.
 Durch schreiben in die Datei wird der Duty Cycle gesetzt.
 Dieser muss im Intervall zwischen $\left[0_{\text{H}}; FF_{\text{H}}\right]$ liegen.
 Der Code um einen belibigen Dezimalwert in \texttt{char*} Repräsentation zu einem Byte zu konvertieren stammt von \autocite{toUint} mit eigenen Modifikationen.
