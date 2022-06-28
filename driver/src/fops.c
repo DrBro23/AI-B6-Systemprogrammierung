@@ -6,14 +6,14 @@
 #include "pwm.h"
 #include "temp.h"
 
-// TODO
+// Add user event key-value pair to enviornment Buffer
 int dev_uevent(struct device *dev, struct kobj_uevent_env *env)
 {
 	add_uevent_var(env, "DEVMODE=%#o", 0666);
 	return 0;
 }
 
-// Convert String to Int
+// Convert string to int
 static unsigned int ToUInt(char *str)
 {
 	unsigned int mult = 1;
@@ -44,14 +44,14 @@ ssize_t dev_write(struct file *file, const char __user *buf, size_t count, loff_
 	not_copied = copy_from_user(data_buf, buf, max_len);
 	if (not_copied == 0)
 	{
-		printk(KERN_INFO "Copied %zd bytes from user\n", max_len);
+		printk(KERN_DEBUG "Fanctrl: Copied %zd bytes from user\n", max_len);
 	}
 	else
 	{
-		printk(KERN_INFO "Could not copy %zd bytes from user\n", not_copied);
+		printk(KERN_WARNING "Fanctrl: Could not copy %zd bytes from user\n", not_copied);
 	}
 	data_buf[max_len - 1] = 0;
-	printk(KERN_INFO "Device write: %s\n", data_buf);
+	printk(KERN_DEBUG "Fanctrl: Device write: %s\n", data_buf);
 
 	duty = ToUInt(data_buf);
 

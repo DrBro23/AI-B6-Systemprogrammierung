@@ -1,6 +1,10 @@
+// ----------------------------------------
+// SPI PWM
+// ----------------------------------------
+
 #include "pwm.h"
 
-// spi device parameters
+// spi bus parameters
 static uint spi_bus = 0;
 static uint spi_cs = 0;
 static uint spi_speed_hz = 4000000;
@@ -24,14 +28,14 @@ int pwmInit(void)
     master = spi_busnum_to_master(spi_device_info.bus_num);
     if (!master)
     {
-        printk(KERN_CRIT "Fanctrl: Failed to find Master");
+        printk(KERN_CRIT "Fanctrl: Failed to find Master\n");
         return -ENODEV;
     }
 
     spi_device = spi_new_device(master, &spi_device_info);
     if (!spi_device)
     {
-        printk(KERN_CRIT "Fanctrl: Failed to set new Device");
+        printk(KERN_CRIT "Fanctrl: Failed to set new Device\n");
         return -ENODEV;
     }
 
@@ -39,7 +43,7 @@ int pwmInit(void)
     ret = spi_setup(spi_device);
     if (ret)
     {
-        printk(KERN_CRIT "Fanctrl: Failed to register");
+        printk(KERN_CRIT "Fanctrl: Failed to register\n");
         spi_unregister_device(spi_device);
         spi_device = NULL;
     }

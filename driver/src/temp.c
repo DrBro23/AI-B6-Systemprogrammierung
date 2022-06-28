@@ -1,10 +1,10 @@
 // ----------------------------------------
-//
+// I2C Temperature Sensor
 // ----------------------------------------
 
 #include "temp.h"
 
-// Communication with the temperature sensor with I2C
+// I2C Device and Adapter
 static struct i2c_adapter *test_i2c_adapter = NULL;
 static struct i2c_client *test_i2c_client = NULL;
 static const struct i2c_device_id test_id[] =
@@ -21,9 +21,9 @@ static struct i2c_board_info test_i2c_board_info = {
 void tempInit(void) {
     test_i2c_adapter = i2c_get_adapter(I2C_BUS_AVAILABLE);
 	if(test_i2c_adapter == NULL)	{
-		printk(KERN_CRIT "Fanctrl: No I2C Adapter found");
+		printk(KERN_CRIT "Fanctrl: No I2C Adapter found\n");
 	}	else	{
-		printk(KERN_DEBUG "Fanctrl: Found I2C Adapter");
+		printk(KERN_DEBUG "Fanctrl: Found I2C Adapter\n");
 		test_i2c_client = i2c_new_client_device(test_i2c_adapter, &test_i2c_board_info);
     	i2c_add_driver(&test_driver);
     	i2c_put_adapter(test_i2c_adapter);
@@ -43,14 +43,14 @@ void tempDeinit(void)   {
 // --- i2c read start ---
 u16 readTemp(void) {
 	int temp;
-	u8 b1, b2;
+	u16 b1, b2;
 
 	i2c_smbus_write_byte(test_i2c_client, 0x00);
-	b1 = i2c_smbus_read_byte(test_i2c_client);
-	b2 = i2c_smbus_read_byte(test_i2c_client);
+	b1 = (u16)i2c_smbus_read_byte(test_i2c_client);
+	b2 = (u16)i2c_smbus_read_byte(test_i2c_client);
 
-	temp = (u16)(((u16)(b1 << 4)) | (((u16)(b2)) >> 4));
-	temp = temp / 16; // 1 / 0.0625°C = 16
+	temp = (b1 << 4) | (b2 >> 4);
+	temp = temp / 16;
 
 	return temp;
 }
