@@ -80,12 +80,12 @@ Dazu wird die externe \textit{ioctl\_opt}\cite{ioctl} Bibliothek benutzt.
 Diese in Kombination der Standard \textit{ctypes} Bibliothek ermöglicht eine ähnliche Nutzung zu den Nativen C-Makros.
 Die \textit{ioctl\_opt} Bibliothek stellt ähnliche Makros zur Verfügung.
 Die interne Implementation besteht aus logischen Operationen und Shifts.
-Die resultierenden \gls{ioctl} Konstanten können dannach auf eine geöffnete Instanz der angelegten Pseudodatei in \texttt{/etc/fanctrl} durch \texttt{fcntl.ioctl} mit einem geigneten Buffer angewendet werden.
+Die resultierenden \gls{ioctl} Konstanten können dannach auf eine geöffnete Instanz der Pseudodatei in \texttt{/etc/fanctrl} durch \texttt{fcntl.ioctl} mit einem geigneten Buffer angewendet werden.
 Um den Buffer zu schreiben oder zu lesen wird die native \texttt{Bytes} Klasse verwendet.
 Die Bytes benutzen \textit{little Endianness}.
 Eine relevante Funktionen ist in \autoref{code:py-ioctl} aufgeführt.
 
-\lstinputlisting[linerange={27-36}, firstnumber=27, caption={\texttt{./app/app.py} \gls{ioctl} für zum Auslesen der Temperatur}, language=python, label=code:py-ioctl, float=h]{../../app/app.py}
+\lstinputlisting[linerange={27-36}, firstnumber=27, caption={\texttt{./app/app.py} \gls{ioctl} zum Auslesen der Temperatur}, language=python, label=code:py-ioctl, float=h]{../../app/app.py}
 
 \subsubsection{Installation und Ausführung}
 
