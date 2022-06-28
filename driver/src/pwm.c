@@ -5,10 +5,10 @@
 #include "pwm.h"
 
 // spi bus parameters
-static uint spi_bus = 0;
-static uint spi_cs = 0;
-static uint spi_speed_hz = 4000000;
-static uint spi_bits_per_word = 8;
+static u8 spi_bus = 0;
+static u8 spi_cs = 0;
+static u16 spi_speed_hz = 4000000;
+static u8 spi_bits_per_word = 8;
 
 static struct spi_device *spi_device;
 
