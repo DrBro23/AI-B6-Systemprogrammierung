@@ -169,10 +169,9 @@ wobei
 
 Der Timer ist in einer astabilen Konfiguration verbunden.
 Der Timer erwartet lediglich eine positive Spannung über $U+$ zu $U-$ von $3.3\si{\volt}$.
-Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin 7, \texttt{DIS}, oder auch an Pin 3, \texttt{OUT}, gegben.
-\texttt{DIS} ist Open-Drain womit der High-Pegel zu einer beliebigen Spannung eingestellt werden kann.
+Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin, \texttt{OUT}, gegben.
 Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
-Folglich ist eine Berechnung von $f$ nicht möglich\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die resultate daraus sehr ungenau und nahezu unbrauchbar.}.
+Folglich ist eine Berechnung von $f$ nicht möglich\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die Resultate daraus sehr ungenau und nahezu unbrauchbar.}.
 Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
 Der \texttt{LTSpice} Quellcode für die Partielle Bestimmung der Spannung an dem Kondensator wird in \autoref{apx:sim} gegeben.
 Der Duty-Cycle des \gls{pwm} Signals kann nicht analytisch bestimmt werden, jedoch ist dieser proportional zu den Wiederständen ($R_{\text{WA}} \propto D, R - R_{\text{WB}} \propto D$).
@@ -201,7 +200,7 @@ Diese Annahme wird auch in dem Treiber genutzt.
         \draw (0,-2) node [above]{CTRL} -- +(0,-0.5) node [anchor=-45]{5} coordinate (#2 CTRL); % Pin 5 CTRL
         \draw (-1.5,-.5) node [right]{THR} -- +(-0.5,0) node [anchor=-135]{6} coordinate (#2 THR); % Pin 6 THR
         \draw (-1.5,1.5) node [right]{DIS} -- +(-0.5,0) node [anchor=-135]{7} coordinate (#2 DIS); % Pin 7 DIS
-        \draw (0,2) node [below]{$\mathsf{V_{CC}}$} -- +(0,0.5) node [anchor=45]{8} coordinate (#2 VCC); % Pin 8 VCC
+        \draw (0,2) node [below]{$V_{\mathrm{CC}}$} -- +(0,0.5) node [anchor=45]{8} coordinate (#2 VCC); % Pin 8 VCC
     \end{scope}
     }
 
@@ -212,14 +211,20 @@ Diese Annahme wird auch in dem Treiber genutzt.
 
     \draw(VCC)to [short, o-] ++(1,0) coordinate (NOD1);
 
-    \draw (-8, 2) to[potentiometer, n=mcp, l_=$R$] ++(2,0);
-    \draw (mcp.a) node[above right] {$B$};
-    \draw (mcp.b) node[above left] {$A$};
+    \draw (-6, 0) to[potentiometer, n=mcp, l_=$R_p$] ++(-2,0);
+    \draw (mcp.a) node[above left] {$B$};
+    \draw (mcp.b) node[above right] {$A$};
     \draw (mcp.wiper) node[right] {$W$};
-    \draw (1 OUT) -- ++(1,0)-- ++(0, 5) -| (mcp.wiper);
-    \draw (mcp.b)--++(-1, 0) to[D,n=d1,l_=$D_1$] ++(0,-2);
-    \draw (mcp.a)--++(1, 0) to[D,invert, n=d2,l_=$D_2$] ++(0,-2) -| (d1.a);
-    \draw (mcp) to[open, -*] ++(0,-2) -- ++(0,-2) coordinate (NOD2) to[C,n=C,l_=$C$, -*] (mcp |- GND);
+
+    % \draw (1 OUT) -- ++(1,0)-- ++(0, 5) -| (mcp.wiper);
+
+    \draw (mcp.a)-- ++(-1, 0) to[D,n=d1,l_=$D_1$] ++(0,2);
+    \draw (mcp.b)-- ++( 1, 0) to[D,invert, n=d2,l_=$D_2$] ++(0,2) -| (d1.a);
+    \draw (mcp.wiper) to[short] ++(0,-1) -- ++(0,-2) coordinate (NOD2) to[C,n=C,l_=$C$, -*] (mcp |- GND);
+
+    \draw (mcp) to[open] ++(0,2) to[R, l_=$R_1$, *-*] ++(0,2);
+    \draw(1 DIS) -- ++(-1,0) coordinate (NOD3);
+    \draw (d2) ++(0,1) to[short, *-] ++(1,0) -| (NOD3);
 
     \draw(1 TRG) --++(-1,0);
     \draw(1 THR) --++(-1,0) to[short, -*] ++(0,-1) to[short, -*] ++(-4,0);
@@ -230,8 +235,10 @@ Diese Annahme wird auch in dem Treiber genutzt.
     \draw(1 CTRL) to [C,l_=100nF, -*] (1 CTRL |- GND);
     \draw(1 GND) to [short] (1 GND |- GND) to [short] (GND);
 
-    \draw(1 DIS)--++(-1,0) to[R, *-*, l_={$5,6\si{k\ohm}$}] ++(0,2.5);
-    \draw(1 DIS)++(-1,0) to[short] ++(-1,0) node[ocirc](OUT){} node[below]{PWM};
+    \draw(1 OUT) -- ++(1,0) node[ocirc] {} node[right] {PWM};
+
+    % \draw(1 DIS)--++(-1,0) to[R, *-*, l_={$5,6\si{k\ohm}$}] ++(0,2.5);
+    % \draw(1 DIS)++(-1,0) to[short] ++(-1,0) node[ocirc](OUT){} node[below]{PWM};
 
     \end{tikzpicture}
     \caption{NE555 Timer in PWM Konfiguartion.}
