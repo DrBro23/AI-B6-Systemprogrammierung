@@ -1,11 +1,15 @@
-% Robin Prillwitz 2020
+% Robin Prillwitz 2022
 
 \usepackage[acronym, toc]{glossaries}
 \usepackage[automake, nonumberlist, nogroupskip]{glossaries-extra}
-\makeglossaries
-\setabbreviationstyle[acronym]{long-short}
 
-\newacronym{i2c}{I\textsuperscript{2}C}{Inter-IC Communication}
+% \makeglossaries
+\setabbreviationstyle[acronym]{long-short}
+\renewcommand*{\glstextformat}[1]{\textit{#1}} % cursive acronyms
+\renewcommand\glstreepredesc{\tabto{4cm}} % glossary spaceing
+
+
+\newacronym{i2c}{I\textsuperscript{2}C}{Inter-Integrated Circuit}
 \newacronym{spi}{SPI}{Serial peripheral Interface}
 \newacronym{ipc}{IPC}{Interprocess Communication}
 
@@ -13,7 +17,7 @@
 \newacronym{sbc}{SBC}{Single-Board Computer}
 \newacronym{cli}{CLI}{Command Line Interface}
 
-\newglossaryentry{rpi}{name={Raspberry Pi}, description={Ein kleiner \gls{sbc} für embedded Anwendungen}}
+\newglossaryentry{rpi}{name={Raspberry Pi}, description={Ein kleiner \acrshort{sbc} für embedded Anwendungen}}
 \newglossaryentry{float}{name={floating point}, description={32 oder 64-bit Gleitkommazahlen}}
 \newglossaryentry{int}{name={integer}, description={32 oder 64-bit Ganze, natürliche, Zahlen}}
 
@@ -27,7 +31,7 @@
 \newacronym{fpu}{FPU}{Floating point unit}
 \newacronym{api}{API}{Application Programming Interface}
 \newacronym{fops}{FOPS}{File Operations}
-\newacronym{ioctl}{IOCTL}{I/O-Control}
+\newacronym{ioctl}{IOCTL}{Input/Output Control}
 \newacronym{pwm}{PWM}{Pulse width modulation}
 \newacronym{nc}{N/C}{Not Connected}
 \newacronym{lut}{LUT}{Lookup-table}
@@ -35,6 +39,9 @@
 \newacronym{pcb}{PCB}{Printed circuit board}
 
 \newglossaryentry{breakout}{name={Breakout Board}, description={Trägerplatine um externe Anschlüsse zu erleichtern}}
+\newglossaryentry{kernelspace}{name={Kernelspace}, description={Speicherregion des Kernels}}
+\newglossaryentry{userspace}{name={Userspace}, description={Speicherregion des Nutzers}}
+\newglossaryentry{devicetree}{name={Devicetree}, description={Datenstruktur die Hardware für den Kernel beschreibt}}
 
 \newacronym{mosi}{MOSI}{Master Out, Slave In}
 \newacronym{miso}{MISO}{Master In, Slave Out}
@@ -43,9 +50,7 @@
 
 
 
-% cursive acronyms
-\renewcommand*{\glstextformat}[1]{\textit{#1}}
-% glossary spaceing
-\renewcommand\glstreepredesc{\tabto{4cm}}
+
+
 
 \makeglossaries

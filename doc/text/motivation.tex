@@ -4,14 +4,14 @@
 
 Das Thema dieser Studienarbeit ist die Programmierung eines Gerätetreibers für Linux.
 Dieses Projekt implementiert eine Lüftersteuerung mit Temperatursensor.
-Zum Einsatz kommen ein \gls{rpi} 4b, ein Noctua \textit{NF-A4x20} 5V \gls{pwm} Lüfter mit vier Pins und ein digitaler Temperatursensor \texttt{TMP102}.
-Der Temperatursensor misst die momentane Umbgebungstemperatur.
+Zum Einsatz kommen ein \gls{rpi} 4b, ein \textit{Noctua NF-A4x20} 5V \gls{pwm} Lüfter mit vier Pins und ein digitaler Temperatursensor \texttt{TMP102}.
+Der Temperatursensor misst die momentane Umgebungstemperatur.
 Je nach Erwärmung wird die Drehgeschwindigkeit des Lüfters beeinflusst.
 Hierbei versucht der Lüfter die Temperatur um den Temperatursensor auf normale Umgebungstemperatur herunter zu kühlen.
 
-Das Projekt besteht aus der Applikation im Userspace und dem Treiber im Kernelspace.
+Das Projekt besteht aus der Applikation im \gls{userspace} und dem Treiber im \gls{kernelspace}.
 Der Treiber kommuniziert mit \gls{i2c} und \gls{spi} mit der Hardwareperipherie.
-Die Schnittstelle zwischen Kernelspace und Userspace wird sowohl durch \gls{fops} und \gls{ioctl} ermöglicht.
+Die Schnittstelle zwischen \gls{kernelspace} und \gls{userspace} wird sowohl durch \gls{fops} und \gls{ioctl} ermöglicht.
 \autoref{fig:block} beschreibt den abstrakten Aufbau des Projekt.
 Im Folgenden Dokument wird der Aufbau von der Software, als auch der Hardware erklärt.
 
@@ -21,9 +21,9 @@ Im Folgenden Dokument wird der Aufbau von der Software, als auch der Hardware er
         \draw (0,1) node {};
         \draw (0,-10) node {};
         \draw[fill=black!20!white, draw, thick] (-3,0.5) rectangle ++(6cm,-5cm);
-        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=6cm] (app) {Applikation (Userspace)};
+        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=6cm] (app) {Applikation (\gls{userspace})};
         \node[minimum height=1cm, minimum width=6cm, below of=app] (fops) {\acrshort{fops} oder \acrshort{ioctl}};
-        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=5cm, below of=fops] (driver) {Fanctrl (Kernelspace)};
+        \node[fill=red!40!white, thick, draw, minimum height=1cm, minimum width=5cm, below of=fops] (driver) {Fanctrl (\gls{kernelspace})};
         \node[minimum height=1cm, minimum width=6cm, below of=driver] (kernel) {Linux Kernel};
         \node[fill=black!20!white, thick, draw, minimum height=1cm, minimum width=6cm, below of=kernel] (hardware) {\gls{rpi} Hardware};
         \node[below= 1cm of hardware] (sensor) {};

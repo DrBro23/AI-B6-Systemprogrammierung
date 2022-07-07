@@ -3,12 +3,12 @@
 Um die Geschwindigkeit eines Lüfters zu regulieren, wird dieser mit einem \gls{pwm} Signal gesteuert.
 Die Pulsweite ist proportional zur resultierenden Zielgeschwindigkeit.
 Der \gls{rpi} hat interne Hardware um \gls{pwm} Signale zu generieren.
-Diese sind jedoch nicht trivial aus dem Kernelspace erreichbar.
+Diese sind jedoch nicht trivial aus dem \gls{kernelspace} erreichbar.
 
 Als Ersatzlösung wird externe Hardware genutzt.
 Ein \texttt{555} Timer erstellt ein rechteckiges Wechselsignal.
 Die Pulsweite wird durch ein \texttt{MCP41XXX} digitales Potentiometer über \gls{spi} eingestellt.
-Folglich ist die Lüftergeschwindigkeit proportional zur Pulsweite und proportional zum eingestellten Wiederstand.
+Folglich ist die Lüftergeschwindigkeit proportional zur Pulsweite und proportional zum eingestellten Widerstand.
 
 \subsubsection{SPI Bus}
 
@@ -54,14 +54,11 @@ Dies funktioniert mit der \gls{miso} Leitung vice versa.
 Die Schaltung des digitalen Potentiometers wird direkt an den \gls{rpi} angeschlossen.
 Die Pins werden wie in \autoref{tab:spi} verbunden.
 Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
-Um deren Wiederstandswert einzustellen müssen zwei Bytes über \gls{spi} gesendet werden.
-Das erste Byte stellt das Command-Byte dar.
-Das zweite Byte die tatsächlichen Daten.
-Die in \autoref{fig:spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus dem Command-Byte und aus einem folgenden Datenbyte zusammen.
+Um deren Wiederstandswert einzustellen müssen zwei Bytes sequentiell über \gls{spi} gesendet werden.
+Das erste Byte stellt das Command-Byte dar, das zweite das Daten-Byte $D_n$.
+Die in \autoref{fig:spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus beiden Bytes zusammen.
 Die Bedeutung des Command-Byte wird in \autoref{tab:command-bits} erklärt.
-Das Datenbyte setzt sich aus den folgenden 8 Bits (D7, \ldots, D0) zusammen.
-Der resultierende Wiederstand zwischen Anschluss A und W kann mit der \autoref{eq:resistance1} berechnet werden.
-Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechnen.
+Der resultierende Wiederstände können mit \autoref{eq:resistance1} und \autoref{eq:resistance2} berechnet werden.
 
 \begin{table}[h]
     \centering
@@ -159,8 +156,8 @@ Der Wiederstand zwischen B und W ist mit \autoref{eq:resistance2} zu berechnen.
 \end{equation}
 wobei
 \begin{align*}
-    R_{\text{AB}} &: \text{Wiederstand zwischen Anschluss A und B, hier: } 10\si{k\ohm} \\
-    R_{\text{W}} &: \text{Wiper Wiederstand, nominal: } 52\si{\ohm}  \\
+    R_{\text{AB}} &: \text{Widerstand zwischen Anschluss A und B, hier: } 10\si{k\ohm} \\
+    R_{\text{W}} &: \text{Wiper Widerstand, nominal: } 52\si{\ohm}  \\
     D_{\text{n}} &: \text{Dezimalwert des Wiperregisters: } 0_{10} \leq D_{\text{n}} \leq 255_{10}
 \end{align*}
 \end{samepage}
@@ -169,15 +166,15 @@ wobei
 
 Der Timer ist in einer astabilen Konfiguration verbunden.
 Der Timer erwartet lediglich eine positive Spannung über $U+$ zu $U-$ von $3.3\si{\volt}$.
-Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin, \texttt{OUT}, gegben.
+Ein rechteckiges Ausgangssignal mit einstellbarer Pulsweite wird an Pin, \texttt{OUT}, gegeben.
 Eine analytische Bestimmung von $U_C(t)$ oder $I(t)$ kann aufgrund der nicht linearen Übertragungsfunktion der Diode nicht bestimmt werden \autocite{rdc}.
 Folglich ist eine Berechnung von $f$ nicht möglich\footnote{Eine grobe Annäherung durch die Annahme, dass $U_{fd}$ der Dioden konstant und unabhängig von $I$ ist, ist möglich, jedoch sind die Resultate daraus sehr ungenau und nahezu unbrauchbar.}.
 Die Frequenz kann lediglich empirisch durch Messung oder Simulation ermittelt werden.
 Der \texttt{LTSpice} Quellcode für die Partielle Bestimmung der Spannung an dem Kondensator wird in \autoref{apx:sim} gegeben.
-Der Duty-Cycle des \gls{pwm} Signals kann nicht analytisch bestimmt werden, jedoch ist dieser proportional zu den Wiederständen ($R_{\text{WA}} \propto D, R - R_{\text{WB}} \propto D$).
+Der Duty-Cycle des \gls{pwm} Signals kann nicht analytisch bestimmt werden, jedoch ist dieser proportional zu den Widerständen ($R_{\text{WA}} \propto D, R - R_{\text{WB}} \propto D$).
 Diese Annahme wird auch in dem Treiber genutzt.
 
-\begin{figure}[p]
+\begin{figure}
     \centering
     \begin{tikzpicture}[
         %Global Config
@@ -252,19 +249,19 @@ Dieser benötigt eine Gleichspannung von $5\si{\volt}$ und wird mit einem \gls{p
 Das Tacho-Signal wird nicht verwendet.
 Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
 
-\begin{figure}[p]
+\begin{figure}[h]
     \centering
     \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width=6cm]{./pic/noctua-1.jpg}
+        \includegraphics[width=6cm]{./img/noctua-1.jpg}
     \end{subfigure}
     \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width=6cm]{./pic/noctua-2.jpg}
+        \includegraphics[width=6cm]{./img/noctua-2.jpg}
     \end{subfigure}
     \caption{Der Lüfter von \textit{Noctua} \autocite{noctua-fan}.}
     \label{fig:fan-pic}
 \end{figure}
 
-\begin{table}[p]
+\begin{table}[h]
     \centering
     \begin{tabular}{|l|l|l|l|}
         \hline
@@ -280,6 +277,6 @@ Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
         4 & \textcolor{blue}{$\blacksquare$ Blau} & \gls{pwm} & \gls{pwm} von \texttt{555} \\
         \hline
     \end{tabular}
-    \caption{\gls{pwm} Lüfter Pinout Tabelle}
+    \caption{\gls{pwm} Lüfter Pinbelegungs Tabelle}
     \label{tab:fan-pinout}
 \end{table}

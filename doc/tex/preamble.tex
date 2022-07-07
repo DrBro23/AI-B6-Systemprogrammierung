@@ -1,10 +1,30 @@
-% Robin Prillwitz 2020
+% Robin Prillwitz 2022
 
 \usepackage[utf8]{inputenc}
-% \usepackage{tgtermes}
 \usepackage[T1]{fontenc}
-\usepackage[ngerman]{babel}
 
+% LOCAL
+\usepackage[ngerman]{babel}
+\usepackage[iso,german]{isodate}
+\usepackage{hyphenat}
+\hyphenation{Mathe-matik wieder-gewinnen}
+\usepackage[babel=true]{csquotes}
+
+% APPENDIX
+\usepackage[toc,page]{appendix}
+\renewcommand{\appendixpagename}{\section*{Anhang}}
+\renewcommand{\appendixtocname}{Anhang}
+
+% COLOR
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\definecolor{hlc}{HTML}{000000}
+\newcommand\hlc{\color{hlc}}
+
+% FONT COLOR
+\addtokomafont{disposition}{\hlc\sffamily}
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+
+% FONT
 \usepackage{fontspec}
 \usepackage{textcomp}
 \newfontfamily\Verdana{Verdana}[Scale=MatchLowercase, Ligatures=TeX]
@@ -15,46 +35,37 @@
 \setmonofont[Scale=MatchLowercase, Ligatures=TeX, Contextuals={Alternate}]{Fira Code}
 \setmainfont[Ligatures=TeX]{Minion Pro}
 
-\usepackage[iso,german]{isodate}
-\usepackage{hyphenat}
-\hyphenation{Mathe-matik wieder-gewinnen}
-
-\usepackage[
-  % left=2.5cm,
-  % right=2.5cm,
-  % top=3cm,
-  % bottom=2.5cm,
-  % includeheadfoot
-]{geometry}
-
+% UTIL
 \usepackage{lipsum}
-
 \usepackage{ragged2e}
 \usepackage{seqsplit}
 \usepackage{tabto}
-\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
-\definecolor{hlc}{HTML}{2F4673}
-\newcommand\hlc{\color{hlc}}
+\usepackage{setspace}
+\usepackage{multicol}
+\usepackage{hologo}
+\usepackage[nopatch=eqnum]{microtype}
+\usepackage[inline]{enumitem}
+\usepackage{url}
+\usepackage{pdfpages}
+\usepackage{accsupp}
+\usepackage{letltxmacro}
+\usepackage{ifplatform}
+\renewcommand{\macosxname}{{\Helvetica MacOs}}
+\usepackage[defaultlines=3,all]{nowidow}
+\brokenpenalty10000\relax
 
+% FIGURE
 \usepackage{float}
 \usepackage[margin=15pt,font=footnotesize,labelfont={color=hlc,bf,sf}]{caption}
 \usepackage{subcaption}
 \usepackage{wrapfig}
+% \usepackage{bigfoot}
+\interfootnotelinepenalty=10000
+
+% GRAPHIC
 \usepackage{graphicx}
 \usepackage{grffile}
-\usepackage{setspace}
-\usepackage{multicol}
-\usepackage[inline]{enumitem}
-\usepackage{textcomp}
-\usepackage{fullpage}
-\usepackage{url}
-%\usepackage{sectsty}
-\usepackage{pdfpages}
-\usepackage{hologo}
-\usepackage{microtype}
-
-\usepackage{bigfoot}
-\interfootnotelinepenalty=10000
+\graphicspath{{img/}}
 
 % TABLE
 \usepackage{tabularx}
@@ -62,56 +73,57 @@
 \captionsetup[table]{labelformat=simple, labelsep=colon}
 \captionsetup[subtable]{labelformat=simple, labelsep=colon}
 
-% \addtokomafont{section}{\hlc}
-% \addtokomafont{subsection}{\hlc}
-% \addtokomafont{subsubsection}{\hlc}
-% \addtokomafont{paragraph}{\hlc}
-\addtokomafont{disposition}{\hlc\rmfamily}
-\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
-
 % TOC
-\usepackage{tocloft}
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
 \addto\captionsngerman{\renewcommand*\contentsname{Inhaltsverzeichnis}}
 \addto\captionsngerman{\renewcommand*\listfigurename{Abbildungsverzeichnis}}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
-% \usepackage[nottoc]{tocbibind}
 
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0pt}
-\rfoot{\thepage}
+% HEADER & FOOTER
+\usepackage{scrlayer}
+\usepackage[]{scrlayer-scrpage}
+\ofoot*{\pagemark}
+\cfoot*{}
+% Make typearea (KOMA Script) default
+% however make newgeometry available
+% \usepackage{typearea}
+\usepackage[]{geometry}
+% \usepackage{showframe} % debug
 
-% special math formatting
+
+% MATH
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{siunitx}
+\usepackage[locale=DE]{siunitx}
 
+% square root hack
+% adds a trailing vertical edge to square roots
+\makeatletter
+  \let\oldr@@t\r@@t
+  \def\r@@t#1#2{%
+  \setbox0=\hbox{$\oldr@@t#1{#2\,}$}\dimen0=\ht0
+  \advance\dimen0-0.2\ht0
+  \setbox2=\hbox{\vrule height\ht0 depth -\dimen0}%
+  {\box0\lower0.4pt\box2}}
+  \LetLtxMacro{\oldsqrt}{\sqrt}
+  \renewcommand*{\sqrt}[2][\ ]{\oldsqrt[#1]{#2} }
+\makeatother
+
+% FLOAT COUNTER
 \floatstyle{ruled}
-
-% -- structural elements
 \newfloat{program}{thp}{lop}
 \floatname{program}{Program}
-
-% \newfloat{figure}{thp}{lop}
 \floatname{figure}{Abbildung}
-
 \renewcommand{\thetable}{\arabic{table}}
 \renewcommand{\thefigure}{\arabic{figure}}
 
-% -- syntax highlighting
-% \usepackage[scaled]{beramono}
-% \usepackage[T1]{fontenc}
-\usepackage{color}
-\usepackage{tabu}
-
+% TIKZ & PGF
 \usepackage{tikz}
 \usetikzlibrary{patterns}
 \usetikzlibrary{calc}
 \usetikzlibrary{shapes}
 \usetikzlibrary{decorations.markings}
+\usetikzlibrary{arrows,snakes,automata,backgrounds,petri}
 \usepackage{tikz-timing}
 \usetikztiminglibrary[rising arrows]{clockarrows}
 \usepackage{tikzpagenodes}
@@ -120,6 +132,7 @@
 \usepackage{pgfplotstable}
 \usepackage{pgfgantt}
 \pgfplotsset{
+  compat=1.18, % lastest release as of 2022-07-02
   table/search path={./data},
 }
 \usepackage{xparse}
@@ -128,11 +141,6 @@
 \IfValueTF{#2}{[#2]}{}%
 \IfBooleanTF{#1}{\#}{}%
 }}
-
-% APPENDIX
-\usepackage[toc,page]{appendix}
-\renewcommand{\appendixpagename}{Anhang}
-\renewcommand{\appendixtocname}{Anhang}
 
 % CODE
 \usepackage{dirtree}
@@ -152,16 +160,11 @@
     commentstyle=\color{LightSlateGrey},
     directivestyle={\color{RoyalPurple}},
     %
-    emph={u8,u16,int,char,double,float,unsigned,NULL,==,!=,=,KERN_CRIT,KERN_DEBUG,KERN_INFO},
+    emph={},
     emphstyle={\color{BlueViolet}},
     %
     otherkeywords = {;,<<,>>,++,|},
     keywordstyle=\color{WildStrawberry},
-    % morekeywords = [2]{b1,b2,temp,test_i2c_client,test_driver,test_i2c_adapter,test_i2c_board_info},
-    % keywordstyle = [2]{\color{WildStrawberry}},
-    % morekeywords = [3]{I2C_BUS_AVAILABLE,0x00},
-    % keywordstyle = [3]{\color{Crimson}},
-    %
     numbers=left,
     frame=shadowbox,
     tabsize=4,
@@ -171,13 +174,12 @@
     showspaces=false,
     keepspaces,
     breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\BeginAccSupp{ActualText={}}\ensuremath{\color{gray}\hookrightarrow\space}\EndAccSupp{}},
     captionpos=b,
     title=\lstname,
     float,
     belowskip=-0.2cm
 }
-
-\usepackage[babel=true]{csquotes}
 
 % LINKS
 \usepackage[hidelinks]{hyperref}

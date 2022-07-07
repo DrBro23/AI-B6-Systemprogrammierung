@@ -3,7 +3,7 @@
 Beim Temperatursensor handelt es sich um einen \texttt{TMP102} der Firma Texas Instruments auf einem \gls{breakout} von Sparkfun.
 Dieser hat einen Einsatzbereich von -40\si{\celsius} bis 125\si{\celsius} und wird mit \gls{i2c} angesteuert.
 Auf dem Sensor stehen folgende Pins zur Verfügung: \\
-\gls{scl}, \gls{sda}, \gls{vcc}, \gls{gnd}, \texttt{Alert}, \texttt{Add0}
+\gls{scl}, \gls{sda}, \gls{vcc}, \gls{gnd}, \texttt{Alert} und schließlich \texttt{Add0}.
 
 % TODO: Blockschaltbild vlt?
 \subsubsection{Hardwareanschluss}
@@ -11,8 +11,8 @@ Auf dem Sensor stehen folgende Pins zur Verfügung: \\
 Der Sensor benötigt \gls{vcc} und \gls{gnd} für die Spannungsversorgung, sowie \gls{scl} und \gls{sda} für die Kommunikation.
 Die Pins werden mit dem \gls{rpi} wie in \autoref{tab:i2c} verbunden.
 Der \texttt{Alert} Pin ist unbenutzt und wird daher nicht verbunden.
-Der \texttt{Add0} Pin stellt das \gls{lsb} der \gls{i2c} Addresse ein.
-Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern angeschlossen werden, dieser kann \gls{nc} bleiben.
+Der \texttt{Add0} Pin stellt das \gls{lsb} der \gls{i2c} Adresse ein.
+Dieses hat einen Pull-Up auf dem \gls{breakout} und muss somit nicht extern angeschlossen werden, dieser kann \gls{nc} bleiben.
 
 \begin{table}[h]
     \centering
@@ -32,19 +32,20 @@ Dieses hat einen Pullup auf dem \gls{breakout} und muss somit nicht extern anges
 
 \subsubsection{\acrshort{i2c} Bus}
 
-Der \gls{i2c} Bus ist ein Halbduplex Bus zur Kommunikation zwischen einem Master und belibig vielen Slaves.
+Der \gls{i2c} Bus ist ein Halb-Duplex Bus zur Kommunikation zwischen einem Master und beliebig vielen Slaves.
 \gls{i2c} Transaktionen bestehen immer aus 8 Bytes.
-Dannach verschickt der Empfänger ein \texttt{ACK} oder \texttt{NACK} Acknowledgement Bit um zu kennzeichen, ob die Transaktion erfolgreich war.
+Danach verschickt der Empfänger ein \texttt{ACK} oder \texttt{NACK} Acknowledgement Bit um zu kennzeichnen, ob die Transaktion erfolgreich war.
 Jede Transaktion wird von dem Busmaster gestartet.
-Dieser schickt zuerst eine 7 Bit Addresse. Das 8. \texttt{R/W} Bit, das \gls{lsb}, gibt an, ob die folgende Operation ein Master Read oder Master Write ist.
+Dieser schickt zuerst eine 7 Bit Adresse.
+Das 8.\ \texttt{R/W} Bit, das \gls{lsb}, gibt an, ob die folgende Operation ein Master Read oder Master Write ist.
 Ein generelles Muster einer \gls{i2c} Transaktion wird in \autoref{fig:i2c-transaction} angezeigt.
-Die $7$-Bit \gls{i2c} Addresse des \texttt{TMP102} verhält sich wie in \autoref{tab:address} angegeben.
+Die $7$-Bit \gls{i2c} Adresse des \texttt{TMP102} verhält sich wie in \autoref{tab:address} angegeben.
 
 Der \texttt{TMP102} Sensor liefert Messdaten mit 13 Bit Auflösung.
-Da durch \gls{i2c} jedoch nur je 8 Bit gelsen werden können, muss das \texttt{Temperature Register (TR)} an Position $00_H$ zwei mal gelesen werden.
-Die folgenden zwei Bytes müssen dannach zu einem validen Messwert verkettet werden.
-Das zuerst gelesene Byte bildet das \gls{msb}.
-Das folgende Byte hat das \gls{lsb} an 4. Stelle.
+Dadurch \gls{i2c} jedoch nur je 8 Bit gelesen werden können, muss das \texttt{Temperature Register (TR)} an Position $00_H$ zwei mal gelesen werden.
+Die folgenden zwei Bytes müssen danach zu einem validen Messwert verkettet werden.
+Das erste Byte bildet das \gls{msb}.
+Das folgende Byte hat das \gls{lsb} an 4.\ Stelle.
 Die Verkettung erfolgt nach \autoref{eq:concat}.
 Möglicherweise geht durch diese Operation das Sign-Bit verloren.
 Für unsere Anwendungen sind negative Temperaturen jedoch nicht relevant.
@@ -70,11 +71,11 @@ Für unsere Anwendungen sind negative Temperaturen jedoch nicht relevant.
         \texttt{1001011} & \gls{scl} \\
         \hline
     \end{tabular}
-    \caption{\texttt{TMP102} \gls{i2c} \texttt{Add0} Addresse}
+    \caption{\texttt{TMP102} \gls{i2c} \texttt{Add0} Adresse}
     \label{tab:address}
 \end{table}
 
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
     \begin{tikztimingtable}[%
         timing/dslope=0.2,
@@ -98,9 +99,9 @@ Für unsere Anwendungen sind negative Temperaturen jedoch nicht relevant.
         \end{pgfonlayer}
     \end{tikztimingtable}
     \end{center}
-    \caption[Eine \gls{i2c} Datenübertragung.]{Eine \gls{i2c} Datenübertragung aus 8 Addressbits und 8 Datenbits.
-    Der Busmaster erstellt das \texttt{SCL} Signal und verschickt die Addresse, das Read/Write Bit und die Datenbits.
+    \caption[Eine \gls{i2c} Datenübertragung.]{Eine \gls{i2c} Datenübertragung aus 8 Adressbits und 8 Datenbits.
+    Der Busmaster erstellt das \texttt{SCL} Signal und verschickt die Adresse, das Read/Write Bit und die Datenbits.
     Der ausgewählte Slave übernimmt die Acknowledgement Bits.
-    Würde der Slave ein \texttt{NACK} übertragen, müsste der Master die vorheringen 8 Bits wiederhohlen.}
+    Würde der Slave ein \texttt{NACK} übertragen, müsste der Master die vorherigen 8 Bits wiederholen.}
     \label{fig:i2c-transaction}
 \end{figure}

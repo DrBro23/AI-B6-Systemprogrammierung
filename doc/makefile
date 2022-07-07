@@ -1,24 +1,38 @@
 OUTPUTDIRECTORY = dist
 MAINFILE = document
+LC = xelatex
 
+ifeq ($(OS),Windows_NT)
+	OPEN = start texworks
+	EXTRA = --extra-mem-top=2000000
+else
+	OPEN = open
+endif
+
+.PHONY: once
 once:
-	xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
+	${LC} ${EXTRA} --shell-escape -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
 
-build:
-	mkdir -p ${OUTPUTDIRECTORY}
+.PHONY: all
+all:
+ifeq ($(OS),Windows_NT)
+else
+# Copy folder structure
+	mkdir -p ./${OUTPUTDIRECTORYcl}
 	for DIR in $(shell find . -maxdepth 1 -mindepth 1 -type d \( ! -name .vscode ! -name binary ! -name venv ! -name tools \) -exec basename '{}' \;) ; do mkdir -p ${OUTPUTDIRECTORY}/$$DIR ; done
-	xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
+endif
+	${LC} ${EXTRA} -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
 	makeglossaries -d ${OUTPUTDIRECTORY} ${MAINFILE}
-	# xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
-
 	biber -D --output-directory ${OUTPUTDIRECTORY} ${MAINFILE}
-	xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
-	xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
-	#xelatex -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
 
+	${LC} ${EXTRA} -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
+	${LC} ${EXTRA} --shell-escape -output-directory=${OUTPUTDIRECTORY} ${MAINFILE}.tex
+
+.PHONY: open
 open:
-	open ${OUTPUTDIRECTORY}/${MAINFILE}.pdf
+	${OPEN} ${OUTPUTDIRECTORY}/${MAINFILE}.pdf &
 
+.PHONY: clean
 clean:
 	rm -rf ./${OUTPUTDIRECTORY}
-	# rm -f *.out *.aux *.dvi *.log *-blx.bib *.blg *.bbl *.acn *.acr *.alg *.glg *.glo *.gls *.ist *.lof *.lot *.bcf *.run.xml *.tex-e *.toc *._gstmp *.acn *.acr *.alg *.aux *.bbl *.bcf *.blg
+	# rm -f .out.aux .dvi.log -blx.bib.blg .bbl.acn .acr.alg .glg.glo .gls.ist .lof.lot .bcf.run.xml .tex-e.toc ._gstmp.acn .acr.alg .aux.bbl .bcf.blg
