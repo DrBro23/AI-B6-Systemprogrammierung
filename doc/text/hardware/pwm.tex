@@ -54,11 +54,11 @@ Dies funktioniert mit der \gls{miso} Leitung vice versa.
 Die Schaltung des digitalen Potentiometers wird direkt an den \gls{rpi} angeschlossen.
 Die Pins werden wie in \autoref{tab:spi} verbunden.
 Der \texttt{MCP41XXX} hat zwei interne digital steuerbare Potentiometer.
-Um deren Wiederstandswert einzustellen müssen zwei Bytes sequentiell über \gls{spi} gesendet werden.
+Um deren Widerstandswert einzustellen müssen zwei Bytes sequentiell über \gls{spi} gesendet werden.
 Das erste Byte stellt das Command-Byte dar, das zweite das Daten-Byte $D_n$.
 Die in \autoref{fig:spi-mcp-transaction} aufgeführten Bits in der Datenübertragung setzen sich aus beiden Bytes zusammen.
 Die Bedeutung des Command-Byte wird in \autoref{tab:command-bits} erklärt.
-Der resultierende Wiederstände können mit \autoref{eq:resistance1} und \autoref{eq:resistance2} berechnet werden.
+Die resultierenden Widerstände können mit \autoref{eq:resistance1} und \autoref{eq:resistance2} berechnet werden.
 
 \begin{table}[h]
     \centering
@@ -238,7 +238,7 @@ Diese Annahme wird auch in dem Treiber genutzt.
     % \draw(1 DIS)++(-1,0) to[short] ++(-1,0) node[ocirc](OUT){} node[below]{PWM};
 
     \end{tikzpicture}
-    \caption{NE555 Timer in PWM Konfiguartion.}
+    \caption{NE555 Timer in PWM Konfiguration.}
     \label{fig:ne555-pwm}
 \end{figure}
 
@@ -252,10 +252,12 @@ Die Pins werden wie in \autoref{tab:fan-pinout} verbunden.
 \begin{figure}[h]
     \centering
     \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width=6cm]{./img/noctua-1.jpg}
+        \centering
+        \includegraphics[width=4cm]{./img/noctua-1.jpg}
     \end{subfigure}
     \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width=6cm]{./img/noctua-2.jpg}
+        \centering
+        \includegraphics[width=4cm]{./img/noctua-2.jpg}
     \end{subfigure}
     \caption{Der Lüfter von \textit{Noctua} \autocite{noctua-fan}.}
     \label{fig:fan-pic}

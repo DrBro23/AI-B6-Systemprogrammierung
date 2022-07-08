@@ -6,7 +6,8 @@ Die Applikation ist ein eigenständiges Programm.
 Dieses kommuniziert mit dem Treiber über \gls{ioctl}.
 Das Programm ist in \textit{Python 3} implementiert.
 Das Programm ließt periodisch einen Temperatur-Messwert $\texttt{M}_C[n]$ in \si{\celsius} aus und bildet diesen zu einem \gls{pwm}-Duty-Cycle $\texttt{D}[n]$ nach dem Prinzip von \autoref{eq:app} um.
-Da der Treiber die Abtastrate weder vorgibt, noch künstlich limitiert, kann die Samplingfrequenz durch die Applikation frei gewählt werden. Der Parameter $n$ steht hier für die Nummer eines Samples.
+Da der Treiber die Abtastrate weder vorgibt, noch künstlich limitiert, kann die Samplingfrequenz durch die Applikation frei gewählt werden.
+Der Parameter $n$ steht hier für die Nummer eines Samples.
 \begin{equation}
     g \left( \texttt{M}_C \left[n\right] \right) \rightarrow \texttt{D}\left[n\right]
     \label{eq:app}
@@ -83,7 +84,7 @@ Die interne Implementation besteht aus logischen Operationen und Shifts.
 Die resultierenden \gls{ioctl} Konstanten können danach auf eine geöffnete Instanz der Pseudodatei in \texttt{/etc/fanctrl} durch \texttt{fcntl.ioctl} mit einem geeigneten Buffer angewendet werden.
 Um den Buffer zu schreiben oder zu lesen wird die native \texttt{Bytes} Klasse verwendet.
 Die Bytes benutzen \textit{little Endianness}.
-Eine relevante Funktionen ist in \autoref{code:py-ioctl} aufgeführt.
+Eine relevante Funktion ist in \autoref{code:py-ioctl} aufgeführt.
 
 \lstinputlisting[linerange={27-36}, firstnumber=27, caption={\texttt{./app/app.py} \gls{ioctl} zum Auslesen der Temperatur}, language=python, label=code:py-ioctl, float=h]{../../app/app.py}
 
@@ -91,7 +92,7 @@ Eine relevante Funktionen ist in \autoref{code:py-ioctl} aufgeführt.
 
 Zur Ausführung wird eine globale Instanz von \textit{Python} Version \texttt{3.x.x} benötigt.
 Es werden externe Abhängigkeiten benötigt.
-Es wird empfohlen diese in ein lokales \texttt{virtual enviornment} zu installieren um den globalen Scope nicht zu vermüllen.
+Es wird empfohlen diese in ein lokales \texttt{virtual environment} zu installieren um den globalen Scope nicht zu vermüllen.
 Der empfohlene Prozess zur Ausführung ist in \autoref{code:install} angegeben.
 
 \begin{lstlisting}[

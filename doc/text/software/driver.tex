@@ -1,6 +1,6 @@
 \subsection{Kernel Treiber}
 
-\begin{wrapfigure}{o}[1cm]{8cm}
+\begin{wrapfigure}{o}[1cm]{7cm}
 \dirtree{%
 .1 /.
 .2 install\_driver.sh.
@@ -23,11 +23,11 @@
 .4 ioctl.c.
 .4 ioctl.h.
 }
-\caption{Ordnerstruktur des Treibers}
+\caption{Treiber Ordnerstruktur}
 \label{fig:driverdirectory}
 \end{wrapfigure}
 
-Der Code des Kernel-Treibers ist in \texttt{C99} geschrieben.
+Der Code des Kerneltreibers ist in \texttt{C99} geschrieben.
 Dieser ist Prozessoragnostisch.
 Es werden jedoch existierende low-level Treiber zwischen den Prozessorregistern und \gls{kernelspace} erwartet, die die Kommunikation über \gls{i2c} und \gls{spi} abstrahieren.
 Das Modul an sich ist lediglich von Linux-Headern abhängig.
@@ -36,9 +36,9 @@ Die Struktur des Treibers ist in \autoref{fig:driverdirectory} aufgeführt.
 Der Tatsächliche Quellcode für den Treiber befindet sich lediglich im \texttt{src} Ordner.
 Alle anderen Dateien sind notwendig jedoch kein direkter Teil des Treibers.
 
-Die Haupt-Datei mit dem Anfangspunkt des Treibers ist in \texttt{fanctrl.c}.
-Darin wird das Treibermodul initialisiert, registriert, ausgeführt und schließlich auch de-initialisiert.
-Der Kernel-Treiber kann über sowohl durch \gls{fops} als auch mit \gls{ioctl} mit dem \gls{userspace} kommunizieren.
+Die Hauptdatei mit dem Anfangspunkt des Treibers ist in \texttt{fanctrl.c}.
+Darin wird das Treibermodul initialisiert, registriert, ausgeführt und schließlich auch deinitialisiert.
+Der Kerneltreiber kann über, sowohl durch \gls{fops}, als auch mit \gls{ioctl} mit dem \gls{userspace} kommunizieren.
 Dies wird in den \texttt{fops.c} und \texttt{ioctl.c} und deren jeweils dazugehörigen Header-Files implementiert.
 Die anderen zwei Hauptfunktionen, die Kommunikation über \gls{i2c} und \gls{spi} werden jeweils in \texttt{temp.c} und \texttt{pwm.c} implementiert.
 In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche Dateien und der Kompilierungs/Installationsvorgang beschrieben.
@@ -48,8 +48,8 @@ In den folgenden Abschnitten werden die implementierten Funktionen, zusätzliche
 Der Temperatursensor ist in \texttt{./src/temp.c} und \texttt{./src/temp.h} implementiert.
 Mit der Funktion \texttt{tempInit} wird der \gls{i2c} Adapter initialisiert.
 Danach wird ein neuer \gls{i2c} Device \texttt{struct} hinzugefügt und der Treiber wird dem Adapter registriert.
-Der Device enthält die Informationen über Device Name und Adresse.
-Ist der Adapter initialisiert wird dieser mit \texttt{tempDeinit} zum Programm Ende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
+Das Device enthält die Informationen über Device Name und Adresse.
+Ist der Adapter initialisiert wird dieser mit \texttt{tempDeinit} zum Programmende, falls er erfolgreich initialisiert wurde, wieder deinitialisiert.
 Dabei werden alle vom \gls{i2c} Adapter genutzten Ressourcen für den Treiber frei gegeben.
 Auf dem \gls{rpi} muss \gls{i2c} durch die \texttt{raspi-config} aktiviert werden.
 
@@ -155,7 +155,7 @@ Danach wird mit der Funktion \texttt{spi\_busnum\_to\_master} ein geeigneter Bus
 Folgend wird mit \texttt{spi\_new\_device} und schließlich \texttt{spi\_setup} ein \gls{spi} Device angelegt und registriert.
 Zu jedem Schritt können Fehler auftreten, welche abgefangen werden.
 Die Deinitialisierung verläuft wieder ähnlich.
-Ist der \gls{spi} Device erfolgreich geladen, so wird dieser einfach mit \texttt{spi\_unregister\_device} abgemeldet.
+Ist das \gls{spi} Device erfolgreich geladen, so wird dieser einfach mit \texttt{spi\_unregister\_device} abgemeldet.
 
 Um den Widerstand des Potentiometers zu setzen, wird die in \autoref{code:spi-write} gezeigte Funktion genutzt.
 Darin wird eine \gls{spi} Transaktion aus zwei Bytes erstellt.
